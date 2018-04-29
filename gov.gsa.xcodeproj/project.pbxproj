@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		710D00312096749B00D931C3 /* boot_time.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = boot_time.txt; sourceTree = "<group>"; };
 		711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.prime.sh; sourceTree = "<group>"; };
 		711EF8332096709C00CC0EC8 /* gov.gsa.boottime.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.boottime.sh; sourceTree = "<group>"; };
 		71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.sus.sh; sourceTree = "<group>"; };
@@ -20,6 +21,7 @@
 			children = (
 				711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */,
 				711EF8332096709C00CC0EC8 /* gov.gsa.boottime.sh */,
+				710D00312096749B00D931C3 /* boot_time.txt */,
 				71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */,
 				71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */,
 				71DB52D520966C1400622FF8 /* All-Provision Base.sh */,
