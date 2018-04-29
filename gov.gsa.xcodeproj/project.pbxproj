@@ -6,10 +6,17 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXFileReference section */
+		71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.sus.sh; sourceTree = "<group>"; };
+		71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.updialog.sh; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		71DB52CC2096074A00622FF8 = {
 			isa = PBXGroup;
 			children = (
+				71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */,
+				71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */,
 			);
 			sourceTree = "<group>";
 		};
