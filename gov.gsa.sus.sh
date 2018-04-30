@@ -1,14 +1,10 @@
-#!/bin/sh
-#  gov.gsa.sus.sh
-#  gov.gsa
-#
-#  Created by John Graphia on 4/29/18.
-#  
+#!/bin/bash
 #
 bddy=/usr/libexec/PlistBuddy
 tgt=/Library/Preferences/gov.gsa.sus.plist
 #
 $bddy -c "add DeferCount integer 0 " $tgt
+$bddy -c "add DeferDays integer 7 " $tgt
 $bddy -c "add Updates array " $tgt
 #
 #
@@ -22,3 +18,4 @@ UpdCnt=`defaults read /Library/Preferences/gov.gsa.sus Updates|sed -e 's/(//g' -
 #
 #
 $bddy -c "add UpdateCount string '$UpdCnt' " $tgt
+
