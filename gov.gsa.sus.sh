@@ -3,8 +3,12 @@
 bddy=/usr/libexec/PlistBuddy
 tgt=/Library/Preferences/gov.gsa.sus.plist
 #
-$bddy -c "add DeferCount integer 0 " $tgt
-$bddy -c "add DeferDays integer 7 " $tgt
+# Cleanup from previous Day
+$bddy -c "delete Updates" $tgt
+# moved to gov.gsa.updialog
+#$bddy -c "add DeferCount integer 0 " $tgt
+#$bddy -c "add DeferDays integer 7 " $tgt
+#
 $bddy -c "add Updates array " $tgt
 #
 #
@@ -17,5 +21,6 @@ done
 UpdCnt=`defaults read /Library/Preferences/gov.gsa.sus Updates|sed -e 's/(//g' -e 's/)//g' -e '/^$/d'|wc -l`
 #
 #
-$bddy -c "add UpdateCount string '$UpdCnt' " $tgt
+$bddy -c "add UpdateCount integer '$UpdCnt' " $tgt
 
+exit 0
