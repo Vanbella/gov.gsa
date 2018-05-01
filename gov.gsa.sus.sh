@@ -5,9 +5,6 @@ tgt=/Library/Preferences/gov.gsa.sus.plist
 #
 # Cleanup from previous Day
 $bddy -c "delete Updates" $tgt
-# moved to gov.gsa.updialog
-#$bddy -c "add DeferCount integer 0 " $tgt
-#$bddy -c "add DeferDays integer 7 " $tgt
 #
 $bddy -c "add Updates array " $tgt
 #
