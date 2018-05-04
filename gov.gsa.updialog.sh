@@ -22,8 +22,10 @@ echo "I will Install Updates"
 # That way machine reboots and upon next andy run gets a new list of updates. This would also reset the defer counter
 ## workflow
 # softwareupdate -i -a
+
 # if grep "restart" then reboot with 15 minute timer and dialog no defer of reboot
-elif [ $result == 2 ]; then
+#
+else [ $result == 2 ]; then
 echo "I will defer installation"
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`
 inc=$(($dfrcnt+1))
