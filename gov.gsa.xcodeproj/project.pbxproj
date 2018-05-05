@@ -13,12 +13,14 @@
 		71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.sus.sh; sourceTree = "<group>"; };
 		71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.updialog.sh; sourceTree = "<group>"; };
 		71DB52D520966C1400622FF8 /* All-Provision Base.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "All-Provision Base.sh"; sourceTree = "<group>"; };
+		71FC4C3C209E41F5009E473C /* gov.gsa.scripts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = gov.gsa.scripts.xcodeproj; path = gov.gsa.scripts/gov.gsa.scripts.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		71DB52CC2096074A00622FF8 = {
 			isa = PBXGroup;
 			children = (
+				71FC4C3C209E41F5009E473C /* gov.gsa.scripts.xcodeproj */,
 				711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */,
 				711EF8332096709C00CC0EC8 /* gov.gsa.boottime.sh */,
 				710D00312096749B00D931C3 /* boot_time.txt */,
@@ -26,6 +28,13 @@
 				71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */,
 				71DB52D520966C1400622FF8 /* All-Provision Base.sh */,
 			);
+			sourceTree = "<group>";
+		};
+		71FC4C3D209E41F5009E473C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -45,6 +54,12 @@
 			);
 			mainGroup = 71DB52CC2096074A00622FF8;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 71FC4C3D209E41F5009E473C /* Products */;
+					ProjectRef = 71FC4C3C209E41F5009E473C /* gov.gsa.scripts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 			);
