@@ -16,12 +16,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		7153FFE7209E5E240033FBAF /* Example Files */ = {
+			isa = PBXGroup;
+			children = (
+				710D00312096749B00D931C3 /* boot_time.txt */,
+			);
+			path = "Example Files";
+			sourceTree = "<group>";
+		};
 		71DB52CC2096074A00622FF8 = {
 			isa = PBXGroup;
 			children = (
+				7153FFE7209E5E240033FBAF /* Example Files */,
 				71FC4C47209E4782009E473C /* Scripts */,
 				71FC4C46209E4774009E473C /* ExtAttribs */,
-				710D00312096749B00D931C3 /* boot_time.txt */,
 			);
 			sourceTree = "<group>";
 		};
