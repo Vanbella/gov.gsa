@@ -9,3 +9,4 @@ for p in {1..100}
 do
 openssl prime -generate -bits 64
 done
+exit 0
