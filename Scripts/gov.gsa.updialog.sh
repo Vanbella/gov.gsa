@@ -23,7 +23,7 @@ echo "I will Install Updates"
 
 # if grep "restart" then reboot with 15 minute timer and dialog no defer of reboot
 #
-else [ $result == 2 ]; then
+else [ $result == 2 ];
 echo "I will defer installation"
 # Increment Defer Counter
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`

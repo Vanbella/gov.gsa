@@ -21,6 +21,8 @@ UpdCnt=`defaults read /Library/Preferences/gov.gsa.sus Updates|sed -e 's/(//g' -
 $bddy -c "add UpdateCount integer '$UpdCnt' " $tgt
 #
 $bddy -c "add DeferDays integer 8 " $tgt
+$bddy -c "add DeferCount integer 0 " $tgt
 
 
 exit 0
+
