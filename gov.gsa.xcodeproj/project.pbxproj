@@ -21,11 +21,7 @@
 			children = (
 				71FC4C47209E4782009E473C /* Scripts */,
 				71FC4C46209E4774009E473C /* ExtAttribs */,
-				711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */,
 				710D00312096749B00D931C3 /* boot_time.txt */,
-				71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */,
-				71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */,
-				71DB52D520966C1400622FF8 /* All-Provision Base.sh */,
 			);
 			sourceTree = "<group>";
 		};
@@ -40,6 +36,10 @@
 			isa = PBXGroup;
 			children = (
 				711EF8332096709C00CC0EC8 /* gov.gsa.boottime.sh */,
+				71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */,
+				71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */,
+				71DB52D520966C1400622FF8 /* All-Provision Base.sh */,
+				711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
