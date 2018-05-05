@@ -29,15 +29,7 @@
 			children = (
 				7153FFE7209E5E240033FBAF /* Example Files */,
 				71FC4C47209E4782009E473C /* Scripts */,
-				71FC4C46209E4774009E473C /* ExtAttribs */,
 			);
-			sourceTree = "<group>";
-		};
-		71FC4C46209E4774009E473C /* ExtAttribs */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ExtAttribs;
 			sourceTree = "<group>";
 		};
 		71FC4C47209E4782009E473C /* Scripts */ = {
