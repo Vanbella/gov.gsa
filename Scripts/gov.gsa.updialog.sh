@@ -3,6 +3,23 @@ helper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamf
 bddy=/usr/libexec/PlistBuddy
 tgt=/Library/Preferences/gov.gsa.sus.plist
 icon="/usr/local/GSAfiles/GSA-logo_blue.icns"
+#################################################################
+# Decrement Defer Day counter
+dfrday=`$bddy -c "print :DeferDays" $tgt`
+if [ $dfrday == 0 ]; then
+#  If counter is 0 force patch
+final="The Software Update deferal period has expired. Updates will be installed and your system rebooted in 15 minutes"
+result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
+# softwareupdate -i -a
+# shutdown -r +15
+echo "You would be patched and rebooted at this point"
+else
+echo "Defer Day > 0"
+# dec=$(($dfrday-1))
+# $bddy -c "set :DeferDays $dec " $tgt
+#
+fi
+#################################################################
 #
 heading="Required Software Updates Count"
 #
@@ -30,27 +47,9 @@ else [ $result == 2 ];
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`
 inc=$(($dfrcnt+1))
 $bddy -c "set :DeferCount $inc " $tgt
-#
-fi
-#
-# Decrement Defer Day counter
-dfrday=`$bddy -c "print :DeferDays" $tgt`
-if [ $dfrday == 0 ]; then
-#  nudge every 3 days, X number of update are avail,
-final="You can no longer defer. Updates will be installed and your system rebooted in 15 minutes"
-result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
-else
 dec=$(($dfrday-1))
 $bddy -c "set :DeferDays $dec " $tgt
 #
 fi
 #
-#if [$dfrday == 0]; then
-##  nudge every 3 days, X number of update are avail,
-#final="You can no longer defer. Updates will be installed and your system rebooted in 15 minutes"
-#result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
-#else
-#exit 0
-##
-#fi
-#
+
