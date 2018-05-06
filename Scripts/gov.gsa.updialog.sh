@@ -15,8 +15,6 @@ result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading cente
 echo "You would be patched and rebooted at this point"
 else
 echo "Defer Day > 0"
-# dec=$(($dfrday-1))
-# $bddy -c "set :DeferDays $dec " $tgt
 #
 fi
 #################################################################
@@ -25,7 +23,6 @@ heading="Required Software Updates Count"
 #
 description="There are "
 # updcount=`sofwtwareupdate -l|sed -e '/*/d' -e '1,4 d'|wc -l`|sed 's/^[ \t]*//'
-# test code
 updcount=`/usr/bin/defaults read $tgt UpdateCount `
 #
 d2="Security updates for your machine. If you do nothing this window will timeout in 15 minutes and updates will be installed."
@@ -36,10 +33,8 @@ d5="more days. Updates will be force installed on the final day and your machine
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Install" -button2 "Defer" -timeout 900 -countdown -alignCountdown left`
 if [ $result == 0 ]; then
 echo "I will Install Updates"
-# sleep 900
-#softwareupdate -i -a
-#
-# if grep "restart" then reboot with 15 minute timer and dialog no defer of reboot
+# softwareupdate -i -a
+# shutdown -r +15
 #
 else [ $result == 2 ];
 # echo "User defered installation" to GSA log
