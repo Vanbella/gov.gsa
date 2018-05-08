@@ -12,6 +12,7 @@
 		711EF8332096709C00CC0EC8 /* gov.gsa.boottime.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.boottime.sh; sourceTree = "<group>"; };
 		7151A99220A12D8000911F5A /* com.fireeye.xagt.unload.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.fireeye.xagt.unload.sh; sourceTree = "<group>"; };
 		7151A99320A12DD000911F5A /* com.fireeye.xagt.load.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.fireeye.xagt.load.sh; sourceTree = "<group>"; };
+		7157B43B20A1C81D00FA9383 /* com.fireeye.xagt.uninstall.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.fireeye.xagt.uninstall.sh; sourceTree = "<group>"; };
 		7181DBB1209E61F000C2634A /* gov.gsa.sus.extattrib.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = gov.gsa.sus.extattrib.sh; path = ExtAttrib/gov.gsa.sus.extattrib.sh; sourceTree = SOURCE_ROOT; };
 		71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.sus.sh; sourceTree = "<group>"; };
 		71DB52D4209607A000622FF8 /* gov.gsa.updialog.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.updialog.sh; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 				711EF8322096705700CC0EC8 /* gov.gsa.prime.sh */,
 				7151A99220A12D8000911F5A /* com.fireeye.xagt.unload.sh */,
 				7151A99320A12DD000911F5A /* com.fireeye.xagt.load.sh */,
+				7157B43B20A1C81D00FA9383 /* com.fireeye.xagt.uninstall.sh */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
