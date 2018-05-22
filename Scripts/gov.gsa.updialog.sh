@@ -7,6 +7,7 @@ icon="/usr/local/GSAfiles/GSA-logo_blue.icns"
 # Decrement Defer Day counter
 dfrday=`$bddy -c "print :DeferDays" $tgt`
 if [ $dfrday == 0 ]; then
+# -lt 1 then
 #  If counter is 0 force patch
 final="The Software Update deferal period has expired. Updates will be installed and your system rebooted in 15 minutes"
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
