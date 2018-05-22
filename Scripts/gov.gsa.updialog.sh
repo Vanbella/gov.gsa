@@ -14,6 +14,8 @@ final="The Software Update deferal period has expired. Updates will be installed
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
 #softwareupdate -i -a
 softwareupdate -l
+$bddy -c "set :DeferCount 0" $tgt
+$bddy -c "set :DeferDays 8" $tgt
 # shutdown -r +15
 else
 #
@@ -34,10 +36,11 @@ if [ $result -eq 0 ]; then
 echo "I will Install Updates"
 #softwareupdate -i -a
 softwareupdate -l
+$bddy -c "set :DeferCount 0" $tgt
+$bddy -c "set :DeferDays 8" $tgt
 ## shutdown -r +15
 ##
 else
-##[ $result == 2 ];
 ## echo "User defered installation" to GSA log
 ## Increment Defer Counter
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`
