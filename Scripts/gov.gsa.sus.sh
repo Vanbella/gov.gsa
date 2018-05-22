@@ -10,7 +10,7 @@ $bddy -c "add Updates array " $tgt &> /dev/null
 $bddy -c "delete UpdateCount" $tgt &> /dev/null
 ##############################
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`
-if [ $dfrcnt -gt 0 ]; then
+if [[ $dfrcnt -gt 0 ]]; then
 echo "defer in process"
 else
 #$bddy -c "delete DeferDays" $tgt &> /dev/null

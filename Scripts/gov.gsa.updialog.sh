@@ -12,11 +12,10 @@ if [ $dfrday -eq 0 ]; then
 #  If counter is 0 force patch
 final="The Software Update deferal period has expired. Updates will be installed and your system rebooted in 15 minutes"
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
-#softwareupdate -i -a
-softwareupdate -l
+softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $tgt
 $bddy -c "set :DeferDays 8" $tgt
-# shutdown -r +15
+shutdown -r +15
 else
 #
 #################################################################
@@ -34,11 +33,10 @@ d5="more days. Updates will be force installed on the final day and your machine
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Install" -button2 "Defer" -timeout 900 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
 echo "I will Install Updates"
-#softwareupdate -i -a
-softwareupdate -l
+softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $tgt
 $bddy -c "set :DeferDays 8" $tgt
-## shutdown -r +15
+shutdown -r +15
 ##
 else
 ## echo "User defered installation" to GSA log
@@ -51,4 +49,3 @@ $bddy -c "set :DeferDays $dec " $tgt
 echo bddy
 fi
 fi
-
