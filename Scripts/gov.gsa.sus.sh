@@ -4,8 +4,9 @@ bddy=/usr/libexec/PlistBuddy
 tgt=/Library/Preferences/gov.gsa.sus.plist
 #
 # Cleanup from previous Day
+#$bddy -c "delete DeferCount" $tgt &> /dev/null
+#$bddy -c "delete DeferDays" $tgt &> /dev/null
 $bddy -c "delete Updates" $tgt &> /dev/null
-#
 $bddy -c "add Updates array " $tgt &> /dev/null
 #
 #
