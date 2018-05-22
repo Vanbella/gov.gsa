@@ -18,3 +18,4 @@ else
 #echo You have no updates to be installed.
 echo "<result>False</result>"
 fi
+ 
