@@ -21,10 +21,11 @@ $jbinpth policy -id 37 --forceNoRecon # AnyConnect
 echo "Any Connect Installed" >> $logfile
 #
 $jbinpth policy -id 38 --forceNoRecon # Apple HP Print Drivers
-$jbinpth policy -id 32 --forceNoRecon # Chrome
+echo "Apple HP Print Drivers Installed" >> $logfile
+$jbinpth policy -id 289 --forceNoRecon # Chrome
 $jbinpth policy -id 36 --forceNoRecon # Jabber
 $jbinpth policy -id 105--forceNoRecon # VLC
-$jbinpth policy -id 37 --forceNoRecon # VMWare Horizon
+$jbinpth policy -id 292 --forceNoRecon # VMWare Horizon
 #
 # Install CDM/SEC components
 $jbinpth policy -id 63 --forceNoRecon # Policy Banner
