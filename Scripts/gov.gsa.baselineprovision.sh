@@ -18,32 +18,32 @@ jbinpth=/usr/local/bin/jamf
 $jbinpth policy -id 93 --forceNoRecon #
 # Install Baseline Applications
 $jbinpth policy -id 37 --forceNoRecon # AnyConnect
-echo "Any Connect Installed" >> $logfile
+echo "Any Connect Installed" >> $LOGFILE
 #
 $jbinpth policy -id 38 --forceNoRecon # Apple HP Print Drivers
-echo "Apple HP Print Drivers Installed" >> $logfile
+echo "Apple HP Print Drivers Installed" >> $LOGFILE
 $jbinpth policy -id 289 --forceNoRecon # Chrome
-echo "Chrome Installed" >> $logfile
+echo "Chrome Installed" >> $LOGFILE
 $jbinpth policy -id 36 --forceNoRecon # Jabber
-echo "Jabber Installed" >> $logfile
+echo "Jabber Installed" >> $LOGFILE
 $jbinpth policy -id 105--forceNoRecon # VLC
-echo "VLC Installed" >> $logfile
+echo "VLC Installed" >> $LOGFILE
 $jbinpth policy -id 292 --forceNoRecon # VMWare Horizon
-echo "VMWare Horizon Installed" >> $logfile
+echo "VMWare Horizon Installed" >> $LOGFILE
 #
 # Install CDM/SEC components
 $jbinpth policy -id 63 --forceNoRecon # Policy Banner
-echo "Policy Banner Installed" >> $logfile
+echo "Policy Banner Installed" >> $LOGFILE
 $jbinpth policy -id 282 --forceNoRecon # FireEye HX
-echo "FireEye HX Installed" >> $logfile
+echo "FireEye HX Installed" >> $LOGFILE
 $jbinpth policy -id 283 --forceNoRecon # ForeScout Secure Connector
-echo "ForeScout Secure Connector Installed" >> $logfile
+echo "ForeScout Secure Connector Installed" >> $LOGFILE
 $jbinpth policy -id 285 --forceNoRecon # Nessus
-echo "Nessus Installed" >> $logfile
+echo "Nessus Installed" >> $LOGFILE
 $jbinpth policy -id 180 --forceNoRecon # Cylance
-echo "Cylance Installed" >> $logfile
+echo "Cylance Installed" >> $LOGFILE
 $jbinpth policy -id 284 --forceNoRecon # BigFix
-echo "BigFix Installed" >> $logfile
+echo "BigFix Installed" >> $LOGFILE
 #
 exit 0
 #
