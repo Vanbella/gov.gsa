@@ -15,6 +15,7 @@
 		7151A99320A12DD000911F5A /* com.fireeye.xagt.load.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.fireeye.xagt.load.sh; sourceTree = "<group>"; };
 		7157B43B20A1C81D00FA9383 /* com.fireeye.xagt.uninstall.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.fireeye.xagt.uninstall.sh; sourceTree = "<group>"; };
 		7157B43C20A1D1CA00FA9383 /* com.IBM.BigFix.uninstall.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = com.IBM.BigFix.uninstall.sh; sourceTree = "<group>"; };
+		717CA79020C8390700C26A7E /* gov.gsa.hotcornerextatrib.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = gov.gsa.hotcornerextatrib.sh; path = ExtAttrib/gov.gsa.hotcornerextatrib.sh; sourceTree = SOURCE_ROOT; };
 		7181DBB1209E61F000C2634A /* gov.gsa.sus.extattrib.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = gov.gsa.sus.extattrib.sh; path = ExtAttrib/gov.gsa.sus.extattrib.sh; sourceTree = SOURCE_ROOT; };
 		718F98C720B4577700557496 /* Script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Script.sh; sourceTree = "<group>"; };
 		71DB52D32096076B00622FF8 /* gov.gsa.sus.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = gov.gsa.sus.sh; sourceTree = "<group>"; };
@@ -35,6 +36,7 @@
 			isa = PBXGroup;
 			children = (
 				7181DBB1209E61F000C2634A /* gov.gsa.sus.extattrib.sh */,
+				717CA79020C8390700C26A7E /* gov.gsa.hotcornerextatrib.sh */,
 			);
 			name = ExtAttrib;
 			path = "New Group";

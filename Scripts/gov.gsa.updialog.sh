@@ -30,9 +30,9 @@ d3="You can defer for"
 d4=`/usr/bin/defaults read $tgt DeferDays `
 d5="more days. Updates will be force installed on the final day and your machine will be rebooted. Please use Self-Service to perform updates and restart at your convenience."
 ###
-result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Install" -button2 "Defer" -timeout 900 -countdown -alignCountdown left`
+result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Install" -button2 "Defer" -timeout 28800 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
-echo "I will Install Updates"
+# echo "Timer deferred installation" to GSA log
 softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $tgt
 $bddy -c "set :DeferDays 8" $tgt
