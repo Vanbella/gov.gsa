@@ -33,10 +33,16 @@ d5="more days. Updates will be force installed on the final day and your machine
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Install" -button2 "Defer" -timeout 28800 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
 # echo "Timer deferred installation" to GSA log
-softwareupdate -i -a
+#softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $tgt
 $bddy -c "set :DeferDays 8" $tgt
-shutdown -r +15
+#shutdown -r +15
+dfrcnt=`$bddy -c "print :DeferCount" $tgt`
+inc=$(($dfrcnt+1))
+$bddy -c "set :DeferCount $inc " $tgt
+dec=$(($dfrday-1))
+$bddy -c "set :DeferDays $dec " $tgt
+echo bddy
 ##
 else
 ## echo "User defered installation" to GSA log
