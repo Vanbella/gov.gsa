@@ -3,8 +3,9 @@
 ## created by Ian F Bell 090916  ##
 ## Modified by IFB  160916  	 ##
 ## Modified by IFB  101216       ##
-## Modified by IFB   0617	 	 ##
-##Last Modified by IFB 0817      ##
+## Modified by IFB   0617	 ##
+## Modified by IFB 0817      ##
+## Last Modified by JFG 06162018 ##
 ###################################
 
 echo $(date) "Started GSA security script" >> /var/log/GSAlog
@@ -67,22 +68,22 @@ brcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-
 
 if [ "$tlcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner -int 1
 fi
 
 if [ "$trcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner -int 1	
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner -int 1	
 fi
 
 if [ "$blcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner -int 1
 fi
 
 if [ "$brcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-br-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-br-corner -int 1
 fi
 echo $(date) "Screen Saver Settings completed." >> /var/log/GSAlog
 
