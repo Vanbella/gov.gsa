@@ -17,5 +17,7 @@ echo $(date) "Installed Cisco AnyConnect 4.6.01098_06062018" >> /var/log/GSAlog
 # remove the leftovers
 rm -rf /usr/local/GSAFiles/Cisco_AnyConnect_4.6.01098_06062018
 #
+chflags hidden /opt/
+#
 exit 0
 
