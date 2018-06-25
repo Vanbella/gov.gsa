@@ -22,6 +22,9 @@ softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $tgt
 $bddy -c "set :DeferDays 8" $tgt
 shutdown -r +15
+heading="Updates Applied, Reboot in 15 minutes"
+reboot="The Software Updates have been installed. Your machine will automatically reboot in 15 minutes. Please save your work and quit all applications."
+`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -timeout 900 -countdown -alignCountdown left`
 else
 #
 #################################################################
