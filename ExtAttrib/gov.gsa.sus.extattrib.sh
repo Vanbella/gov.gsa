@@ -13,6 +13,6 @@ tgt=/Library/Preferences/com.apple.SoftwareUpdate.plist
 crt=`$bddy -c "print :CriticalUpdateInstall" $tgt`
 lrua=`$bddy -c "print :LastRecommendedUpdatesAvailable" $tgt`
 lua=`$bddy -c "print :LastUpdatesAvailable" $tgt`
-echo echo "<result>Critical $crt Recommended $lrua  Last $lua</result>"
+echo echo "<result>Critical $crt Recommended $lrua  Available $lua</result>"
 #
 exit 0
