@@ -13,4 +13,6 @@ tgt=/Library/Preferences/gov.gsa.sus.plist
 ##############################
 $bddy -c "delete DeferCount" $tgt &> /dev/null
 $bddy -c "delete DeferDays" $tgt &> /dev/null
+$bddy -c "delete Updates array " $tgt &> /dev/null
+$bddy -c "delete Updates" $tgt &> /dev/null
 ##############################
