@@ -8,7 +8,7 @@
 #################################################################
 bddy=/usr/libexec/PlistBuddy
 #sus=/Library/Preferences/gov.gsa.sus.plist
-tgt=/Users/johngraphia/Desktop/SotfwareUpdate.plist
+tgt=/Library/Preferences/com.apple.SoftwareUpdate.plist
 #################################################################
 crt=`$bddy -c "print :CriticalUpdateInstall" $tgt`
 lrua=`$bddy -c "print :LastRecommendedUpdatesAvailable" $tgt`
