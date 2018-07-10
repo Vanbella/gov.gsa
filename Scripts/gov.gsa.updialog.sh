@@ -30,6 +30,7 @@ heading="Apple Security Update Deferal Expired"
 final="The Software Update deferal period has expired. Apple Security Updates will be installed and your system rebooted in 15 minutes. You may click Install to perform the updates immediately."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
 #################################################################
+caffeinate -d -i -m -u
 heading="Apple Security Updates are Being installed"
 patch="Please do not Shutdown, Restart or Sleep your machine. Please save your work and quit all applications."
 `"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch"`
