@@ -30,17 +30,16 @@ heading="Apple Security Update Deferal Expired"
 final="The Software Update deferal period has expired. Apple Security Updates will be installed and your system rebooted in 15 minutes. You may click Install to perform the updates immediately."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
 #################################################################
-caffeinate -d -i -m -u
 heading="Apple Security Updates are Being installed"
 patch="Please do not Shutdown, Restart or Sleep your machine. Please save your work and quit all applications."
-`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch"`
+`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 30 -countdown -alignCountdown left `
 softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $sus
 $bddy -c "set :DeferDays 8" $sus
 #################################################################
 shutdown -r +15
 heading="Updates Applied, Reboot in 15 minutes"
-reboot="Apple Security Updates have been installed. Your machine will automatically reboot in 15 minutes. Please save your work and quit all applications."
+reboot="Apple Security Updates have been installed. Your machine will automatically reboot in 15 minutes or you may click Reboot Now. Please save your work and quit all applications."
 `"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -timeout 900 -countdown -alignCountdown left`
 else
 #
@@ -69,12 +68,13 @@ $bddy -c "set :DeferDays $dec " $sus
 ####################
 elif [ $result -eq 2 ]; then
 # User clicked install 0
-heading="Apple Security Updates are Being installed"
+heading="Apple Security Updates are being installed"
 patch="Please do not Shutdown, Restart or Sleep your machine. Please save your work and quit all applications."
-`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch"`
+`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 60 -countdown -alignCountdown left`
 softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $sus
 $bddy -c "set :DeferDays 8" $sus
+####################
 shutdown -r +15
 heading="Updates Applied, Reboot in 15 minutes"
 reboot="Apple Security Updates have been installed. Your machine will automatically reboot in 15 minutes. Please save your work and quit all applications in preparation for a full reboot."
