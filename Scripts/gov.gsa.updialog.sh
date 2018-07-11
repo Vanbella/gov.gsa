@@ -32,8 +32,9 @@ result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading cente
 #################################################################
 heading="Apple Security Updates are being installed"
 patch="Install will begin in 30 seconds. Please do not Shutdown, Restart or Sleep your machine. Please save your work and quit all applications."
-`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 30 -countdown -alignCountdown left `
-caffeinate -d -i -m -u
+result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 30 -countdown -alignCountdown left -button1 "Ok"`
+if [ $result -eq 243 ]; then
+#caffeinate -d -i -m -u
 softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $sus
 $bddy -c "set :DeferDays 8" $sus
@@ -44,6 +45,8 @@ reboot="Apple Security Updates have been installed. Your machine will automatica
 `"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -timeout 900 -countdown -alignCountdown left`
 else
 #
+echo nonce > /dev/null
+fi
 #################################################################
 #
 heading="Apple Security Software Updates Available"
