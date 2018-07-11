@@ -1,5 +1,4 @@
 #!/bin/sh
-
 #  gov.gsa.sus.extattrib.sh
 #  jss
 #
@@ -12,7 +11,13 @@ tgt=/Library/Preferences/com.apple.SoftwareUpdate.plist
 #################################################################
 crt=`$bddy -c "print :CriticalUpdateInstall" $tgt`
 lrua=`$bddy -c "print :LastRecommendedUpdatesAvailable" $tgt`
-lua=`$bddy -c "print :LastUpdatesAvailable" $tgt`
-echo echo "<result>Critical $crt Recommended $lrua  Available $lua</result>"
+#lua=`$bddy -c "print :LastUpdatesAvailable" $tgt`
+updcnt=$(($crt+lrua))
+if [ $updcnt -gt 0 ]; then
 #
+echo echo "<result>True</result>"
+#
+else
+echo echo "<result>False</result>"
+fi
 exit 0
