@@ -70,7 +70,7 @@ elif [ $result -eq 2 ]; then
 # User clicked install 0
 heading="Apple Security Updates are being installed"
 patch="Please do not Shutdown, Restart or Sleep your machine. Please save your work and quit all applications."
-`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 60 -countdown -alignCountdown left`
+`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 30 -countdown -alignCountdown left`
 softwareupdate -i -a
 $bddy -c "set :DeferCount 0" $sus
 $bddy -c "set :DeferDays 8" $sus
