@@ -1,0 +1,23 @@
+#################################################################
+helper="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
+bddy=/usr/libexec/PlistBuddy
+tgt=/Library/Preferences/com.apple.SoftwareUpdate.plist
+sus=/Library/Preferences/gov.gsa.sus.plist
+icon="/usr/local/GSAfiles/GSA-logo_blue.icns"
+lrua=`$bddy -c "print :LastRecommendedUpdatesAvailable" $tgt`
+lua=`$bddy -c "print :LastUpdatesAvailable" $tgt`
+#################################################################
+#################################################################
+# Start # If /Library/Preferences/gov.gsa.sus.plist does not exist, create it
+if [ ! -f "$sus" ]; then
+echo Create-gov.gsa.sus.plist >> /var/log/GSAlog
+$bddy -c "add DeferDays integer 8 " $sus &> /dev/null
+# Give the user 8 days to defer update installs
+$bddy -c "add DeferCount integer 0 " $sus &> /dev/null
+# Count how many times the user defers
+$bddy -c "delete Updates array " $sus &> /dev/null
+$bddy -c "delete Updates" $sus &> /dev/null
+else
+echo Exists-gov.gsa.sus.plist >> /var/log/GSAlog
+fi
+exit 0
