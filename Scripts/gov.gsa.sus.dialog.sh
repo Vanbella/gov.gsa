@@ -21,11 +21,11 @@ heading="Apple Security Update Deferal Expired"
 final="The Software Update deferal period has expired. Apple Security Updates will be installed and your system rebooted in 15 minutes. You may click Install to perform the updates immediately."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
-echo DeferTimedOut >> /var/log/GSAlog
-#echo $result >> /var/log/GSAlog
+echo $(date) "DeferTimedOut" >> /var/log/GSAlog
+# echo $result >> /var/log/GSAlog
 else
-echo $result >> /var/log/GSAlog
-echo DeferExpired >> /var/log/GSAlog
+# echo $result >> /var/log/GSAlog
+echo $(date) "DeferExpired" >> /var/log/GSAlog
 fi
 }
 #################################################################
@@ -43,14 +43,13 @@ result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading cente
 if [ $result -eq 0 ]; then
 # User clicked Defer button
 ### Increment Defer Counter
-dfrcnt=`$bddy -c "print :DeferCount" $sus`
-inc=$(($dfrcnt+1))
-$bddy -c "set :DeferCount $inc " $sus
-dec=$(($dfrday-1))
-$bddy -c "set :DeferDays $dec " $sus
+modify_counters
+echo $(date) "Modify Counters" >> /var/log/GSAlog
 else
 install_updates
+echo $(date) "Install Updates" >> /var/log/GSAlog
 reboot_timer
+echo $(date) "Reboot Timer" >> /var/log/GSAlog
 fi
 }
 #################################################################
@@ -62,13 +61,13 @@ result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading cente
 if [ $result -eq 243 ]; then
 #caffeinate -d -i -m
 softwareupdate -i -a
-echo InstallUpdatesTimeout >> /var/log/GSAlog
+echo $(date) "Install Updates Timeout" >> /var/log/GSAlog
 $bddy -c "set :DeferCount 0" $sus
 $bddy -c "set :DeferDays 8" $sus
 else
 #caffeinate -d -i -m -u
 softwareupdate -i -a
-echo InstallUpdatesButton >> /var/log/GSAlog
+echo $(date) "Install Updates User Button" >> /var/log/GSAlog
 fi
 }
 #################################################################
@@ -81,47 +80,62 @@ heading="Updates Applied, Reboot in 15 minutes"
 reboot="Apple Security Updates have been installed. Your machine will automatically reboot in 15 minutes or you may reboot via the Apple Menu. Please save your work and quit all applications in preparation for a full reboot."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -timeout 900 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
-echo RebootTimedOut >> /var/log/GSAlog
+echo $(date) "Reboot Time Out" >> /var/log/GSAlog
 #echo $result >> /var/log/GSAlog
 else
-echo $result >> /var/log/GSAlog
-echo RebootExpired >> /var/log/GSAlog
+echo $(date) "Reboot nonce" >> /var/log/GSAlog
 fi
 }
-
-#################################################################
 
 #################################################################
 # DeferCount and DeferDays code
+#################################################################
 modify_counters () {
 dfrcnt=`$bddy -c "print :DeferCount" $tgt`
 inc=$(($dfrcnt+1))
-$bddy -c "set :DeferCount $inc " $tgt
+$bddy -c "set :DeferCount $inc " $sus
+echo $(date) "Increment DeferCount" >> /var/log/GSAlog
 dec=$(($dfrday-1))
-$bddy -c "set :DeferDays $dec " $tgt
-echo Timeout
+$bddy -c "set :DeferDays $dec " $sus
+echo $(date) "Decrement DeferDays" >> /var/log/GSAlog
 }
 #################################################################
-# Start # If there are no updates listed in :LastRecommendedUpdatesAvailable
-#################################################################
-if [[ $lrua -lt 1 ]]; then
-echo NoUpdatesNeeded >> /var/log/GSAlog
-exit 0
+# Start # If /Library/Preferences/gov.gsa.sus.plist does not exist, create it
+if [ ! -f "$sus" ]; then
+echo $(date) "Create-gov.gsa.sus" >> /var/log/GSAlog
+$bddy -c "add DeferDays integer 8 " $sus &> /dev/null
+echo $(date) "DeferDays 8" >> /var/log/GSAlog
+# Give the user 8 days to defer update installs
+$bddy -c "add DeferCount integer 0 " $sus &> /dev/null
+echo $(date) "DeferCount 0" >> /var/log/GSAlog
+# Count how many times the user defers
+$bddy -c "delete Updates array " $sus &> /dev/null
+$bddy -c "delete Updates" $sus &> /dev/null
 else
-echo UpdatesNeeded >> /var/log/GSAlog
+echo $(date) "gov.gsa.sus Exists" >> /var/log/GSAlog
 fi
 #################################################################
-#
+# If there are no updates listed in :LastRecommendedUpdatesAvailable exit
 #################################################################
-#  If Defer Day counter is 0 force patch
+if [[ $lrua -lt 1 ]]; then
+echo $(date) "NoUpdatesNeeded" >> /var/log/GSAlog
+exit 0
+else
+echo $(date) "UpdatesNeeded" >> /var/log/GSAlog
+fi
+#################################################################
+# If Defer Day counter is 0 force patch
+#################################################################
 dfrday=`$bddy -c "print :DeferDays" $sus`
 if [[ $dfrday -eq 0 ]] ; then
 show_deferexpired
+echo $(date) "DeferDaysExpired" >> /var/log/GSAlog
 install_updates
 reboot_timer
 else
-echo DeferDaysNotExpired >> /var/log/GSAlog
+echo $(date) "DeferDaysNotExpired" >> /var/log/GSAlog
 show_userinstall
+modify_counters
 fi
 exit 0
 
