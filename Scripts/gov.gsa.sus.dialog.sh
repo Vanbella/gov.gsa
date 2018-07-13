@@ -62,8 +62,8 @@ if [ $result -eq 243 ]; then
 #caffeinate -d -i -m
 softwareupdate -i -a
 echo $(date) "Install Updates Timeout" >> /var/log/GSAlog
-$bddy -c "set :DeferCount 0" $sus
-$bddy -c "set :DeferDays 8" $sus
+$bddy -c "set :DeferCount 0" $sus &> /dev/null
+$bddy -c "set :DeferDays 8" $sus &> /dev/null
 else
 #caffeinate -d -i -m -u
 softwareupdate -i -a
@@ -91,12 +91,12 @@ fi
 # DeferCount and DeferDays code
 #################################################################
 modify_counters () {
-dfrcnt=`$bddy -c "print :DeferCount" $tgt`
+dfrcnt=`$bddy -c "print :DeferCount" $sus` &> /dev/null
 inc=$(($dfrcnt+1))
-$bddy -c "set :DeferCount $inc " $sus
+$bddy -c "set :DeferCount $inc " $sus &> /dev/null
 echo $(date) "Increment DeferCount" >> /var/log/GSAlog
 dec=$(($dfrday-1))
-$bddy -c "set :DeferDays $dec " $sus
+$bddy -c "set :DeferDays $dec " $sus &> /dev/null
 echo $(date) "Decrement DeferDays" >> /var/log/GSAlog
 }
 #################################################################
