@@ -20,12 +20,19 @@ show_deferexpired () {
 heading="Apple Security Update Deferal Expired"
 final="The Software Update deferal period has expired. Apple Security Updates will be installed and your system rebooted in 15 minutes. You may click Install to perform the updates immediately."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$final" -button1 "Install" -timeout 900 -countdown -alignCountdown left`
+# User clicked Install button1
 if [ $result -eq 0 ]; then
-echo $(date) "DeferTimedOut" >> /var/log/GSAlog
-# echo $result >> /var/log/GSAlog
+echo $(date) "User Clicked Install" >> /var/log/GSAlog
+install_updates
+echo $(date) "Install Updates" >> /var/log/GSAlog
+reboot_timer
+echo $(date) "Reboot Timer" >> /var/log/GSAlog
 else
-# echo $result >> /var/log/GSAlog
-echo $(date) "DeferExpired" >> /var/log/GSAlog
+echo $(date) "Counter Timed Out" >> /var/log/GSAlog
+install_updates
+echo $(date) "Install Updates" >> /var/log/GSAlog
+reboot_timer
+echo $(date) "Reboot Timer" >> /var/log/GSAlog
 fi
 }
 #################################################################
@@ -41,15 +48,21 @@ d4=`/usr/bin/defaults read $sus DeferDays `
 d5="more days. Updates will be force installed on the final day and your machine will be rebooted. Please use Self-Service to perform updates and restart at your convenience."
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$description$updcount $d2 $d3 $d4 $d5" -button1 "Defer" -button2 "Install" -timeout 28800 -countdown -alignCountdown left`
 if [ $result -eq 0 ]; then
-# User clicked Defer button
+# User clicked Defer button1
 ### Increment Defer Counter
+echo $(date) "User Clicked Defer" >> /var/log/GSAlog
 modify_counters
 echo $(date) "Modify Counters" >> /var/log/GSAlog
-else
+elif [ $result -eq 2 ]; then
+# User clicked Install button2
+echo $(date) "User Clicked Install" >> /var/log/GSAlog
 install_updates
 echo $(date) "Install Updates" >> /var/log/GSAlog
 reboot_timer
 echo $(date) "Reboot Timer" >> /var/log/GSAlog
+else
+echo $(date) "Counter Timed Out" >> /var/log/GSAlog
+modify_counters
 fi
 }
 #################################################################
@@ -60,14 +73,10 @@ patch="Install will begin in 30 seconds. Please do not Shutdown, Restart or Slee
 result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$patch" -timeout 30 -countdown -alignCountdown left `
 if [ $result -eq 243 ]; then
 #caffeinate -d -i -m
+echo $(date) "Install Updates Counter Timed Out" >> /var/log/GSAlog
 softwareupdate -i -a
-echo $(date) "Install Updates Timeout" >> /var/log/GSAlog
 $bddy -c "set :DeferCount 0" $sus &> /dev/null
 $bddy -c "set :DeferDays 8" $sus &> /dev/null
-else
-#caffeinate -d -i -m -u
-softwareupdate -i -a
-echo $(date) "Install Updates User Button" >> /var/log/GSAlog
 fi
 }
 #################################################################
@@ -78,15 +87,13 @@ shutdown -r +16
 echo Reboot >> /var/log/GSAlog
 heading="Updates Applied, Reboot in 15 minutes"
 reboot="Apple Security Updates have been installed. Your machine will automatically reboot in 15 minutes or you may reboot via the Apple Menu. Please save your work and quit all applications in preparation for a full reboot."
-result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -timeout 900 -countdown -alignCountdown left`
+result=`"$helper" -windowType hud -lockHUD -title "$heading" -alignHeading center -icon "$icon" -iconSize 96 -description "$reboot" -button1 "Reboot Now" -timeout 900 -countdown -alignCountdown left`
+# User clicked Reboot Now button1
 if [ $result -eq 0 ]; then
-echo $(date) "Reboot Time Out" >> /var/log/GSAlog
-#echo $result >> /var/log/GSAlog
-else
-echo $(date) "Reboot nonce" >> /var/log/GSAlog
+echo $(date) "User Clicked Reboot Now" >> /var/log/GSAlog
+shutdown -r now
 fi
 }
-
 #################################################################
 # DeferCount and DeferDays code
 #################################################################
@@ -94,13 +101,14 @@ modify_counters () {
 dfrcnt=`$bddy -c "print :DeferCount" $sus` &> /dev/null
 inc=$(($dfrcnt+1))
 $bddy -c "set :DeferCount $inc " $sus &> /dev/null
-echo $(date) "Increment DeferCount" >> /var/log/GSAlog
+echo $(date) "Increment DeferCount $inc "  >> /var/log/GSAlog
 dec=$(($dfrday-1))
 $bddy -c "set :DeferDays $dec " $sus &> /dev/null
-echo $(date) "Decrement DeferDays" >> /var/log/GSAlog
+echo $(date) "Decrement DeferDays $dec " >> /var/log/GSAlog
 }
 #################################################################
-# Start # If /Library/Preferences/gov.gsa.sus.plist does not exist, create it
+# Start
+# If /Library/Preferences/gov.gsa.sus.plist does not exist, create it
 if [ ! -f "$sus" ]; then
 echo $(date) "Create-gov.gsa.sus" >> /var/log/GSAlog
 $bddy -c "add DeferDays integer 8 " $sus &> /dev/null
@@ -135,7 +143,7 @@ reboot_timer
 else
 echo $(date) "DeferDaysNotExpired" >> /var/log/GSAlog
 show_userinstall
-modify_counters
+#modify_counters
 fi
 exit 0
 
