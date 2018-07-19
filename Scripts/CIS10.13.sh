@@ -3,10 +3,6 @@
 #  By Ian F Bell 04/17
 #  Updated JFG 19.7.2018
 ##############################################
-
-sw_vers=$(sw_vers -productVersion)
-csrstat=$""
-
 # 1.2 Enable Auto Update
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool TRUE
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool TRUE
@@ -155,63 +151,81 @@ echo $(date) "2.8.1 Time Machine Disabled" >> /var/log/GSAlog
 ##############################################
 # 2.9 Pair the remote control infrared receiver if enabled - Incomplete
 ##############################################
-# 3.1 Configure asl.conf
+# 2.10 Enable Secure Keyboard Entry in Terminal.app - Incomplete
+##############################################
+# 2.11 Java 6 is not the default Java runtime - Incomplete
+##############################################
+# 2.12 Securely delete files as needed - Incomplete
+##############################################
+# 3.1.1 Retain system.log for 90 days or more - GSA requires 180
 days="180"
 sed -ie 's/ttl=./ttl='$days'/' /etc/asl.conf
 killall cfprefsd
 echo $(date) "3.1 Configure asl.conf completed." >> /var/log/GSAlog
 ##############################################
-#3.2 Enable security auditing
+# 3.1.2 Retain appfirewall.log for 90 days or more - GSA requires 180 Incomplete
+##############################################
+# 3.1.3 Retain authd.log for 90 days or more - GSA requires 180 Incomplete
+##############################################
+# 3.2 Enable security auditing
 launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist
 echo $(date) "Enable security auditing completed." >> /var/log/GSAlog
-
-#3.3 Configure security auditing flags
+##############################################
+# 3.3 Configure security auditing flags
 flags="lo,ad,fd,fm,-all"
 sed -ie 's/^flags\(.*\)/flags:'$flags'/' /etc/security/audit_control
 echo $(date) "Configure security auditing flags completed." >> /var/log/GSAlog
-
-#4.1 Disable Bonjour advertising service
+##############################################
+# 3.4 Enable remote logging for Desktops on trusted networks - Exception allowed 
+##############################################
+# 3.5 Retain install.log for 365 or more days - Incomplete
+##############################################
+# 4.1 Disable Bonjour advertising service
 defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
 echo $(date) "Disable Bonjour advertising service completed." >> /var/log/GSAlog
-
-#4.2 WiFi Menu Bar done via policy in JAMF
-#user=$( python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");' )
-#defaults write /Users/$user/Library/Preferences/com.apple.systemuiserver.plist menuExtras -array-add "/System/Library/CoreServices/Menu Extras/AirPort.menu"
-#echo $(date) "Implemented WiFi Menu Bar." >> /var/log/GSAlog
-
-
-#4.4 Disable HTTP service
+##############################################
+# 4.2 WiFi Menu Bar done via policy in JAMF - Per User setting. Must be enforced via JAMF policy in ongoing manner
+##############################################
+# 4.3 Create Network specific locations - Exception allowed
+##############################################
+# 4.4 Disable HTTP service
 apachectl stop
 defaults write /System/Library/LaunchDaemons/org.apache.httpd Disabled -bool true
 echo $(date) "Disable HTTP service complete." >> /var/log/GSAlog
-
-#4.5 Disable FTP service
+##############################################
+# 4.5 Disable FTP service
 launchctl unload -w /System/Library/LaunchDaemons/ftp.plist
 echo $(date) "Disable FTP service complete." >> /var/log/GSAlog
-
-#4.6 Disable NFS service
+##############################################
+# 4.6 Disable NFS service
 nfsd disable
 rm /etc/export
 echo $(date) "Disable NFS service complete." >> /var/log/GSAlog
-
-#5.1.2 Secure System Wide Applications Folder
+##############################################
+# 5.1.1 Secure Home Folders - Incomplete
+##############################################
+# 5.1.2 Secure System Wide Applications Folder
 find /Applications -type d -exec chmod -R 755 {} + 2> /dev/null
 find /Applications -type d -exec chown root:wheel {} + 2> /dev/null
 echo $(date) "Secure System Wide Applications Folder complete." >> /var/log/GSAlog
-
-#5.1.4 Secure Open Library Folders
+##############################################
+# 5.1.3 Check System for World Writable Files - Incomplete
+##############################################
+# 5.1.4 Check Library Folder for World Writable Files
 # CIS 5.1.4 - Curtesy of Owen Pragel (owen dot pragel @ 74bit dot com)
 find /Library -type d -exec chmod -R o-w {} +
 echo $(date) "Secure Open Library Folders complete." >> /var/log/GSAlog
-
-#5.6 Enable OCSP and CRL certificate checking
+##############################################
+# 5.2.1 Configure Account Lockout Threshold - Incomplete
+##############################################
+# 5.6 Enable OCSP and CRL certificate checking
 defaults write com.apple.security.revocation CRLSufficientPerCert -int 1
 defaults write com.apple.security.revocation CRLStyle -string RequireIfPresent
 defaults write com.apple.security.revocation OCSPSufficientPerCert -int 1
 defaults write com.apple.security.revocation OCSPStyle -string RequireIfPresent
 defaults write com.apple.security.revocation RevocationFirst -string OCSP
 echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GSAlog
-
+##############################################
 #5.7 Disable root user this is off by default and checked by Jamf Pro
 
 #5.8 Disable automatic login done via Profile
