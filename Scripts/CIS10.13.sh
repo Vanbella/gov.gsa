@@ -53,6 +53,11 @@ then
 fi
 echo $(date) "2.2.2 Time set within appropriate limits enabled." >> /var/log/GSAlog
 ##############################################
+# 2.2.3 Restrict NTP server to loopback interface - Incomplete
+##############################################
+# 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Not Complete
+##############################################
+# 2.3.2 Secure screen saver corners
 user=`who|grep console|awk '{print $1}'`
 tlcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner )
 trcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner )
@@ -80,83 +85,82 @@ sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvo
 fi
 echo $(date) "2.3.2 hot corner check completed." >> /var/log/GSAlog
 ##############################################
-# Disable Remote Apple Events
+# 2.3.3 Verify Display Sleep is set to a value larger than the Screen Saver
+# Config Profile "Energey Savings" Desktop/Laptop(Bat&AC) 15 mins
+##############################################
+# 2.3.4 10.13 Exceptions List - 3 methods
+# 1. Apple Menu "Lock Screen" 2. Key sequence of ^+command+q 3. Menubar / NoMAD "Lock Screen"
+##############################################
+# 2.4.1 Disable Remote Apple Events
 systemsetup -setremoteappleevents off
 echo $(date) "2.4.1 Disable Remote Apple Events completed." >> /var/log/GSAlog
 ##############################################
-# Disable Internet Sharing
+# 2.4.2 Disable Internet Sharing
 defaults write /Library/Preferences/SystemConfiguration/com.apple.nat NAT -dict-add Enabled -int 0
 echo $(date) "2.4.2 Disable Internet Sharing completed." >> /var/log/GSAlog
 ##############################################
-# Disable the printer sharing service
-cupsctl --no-share-printers
+# 2.4.3 Disable Screen Sharing We Need this for Jamf Pro 
+#
 ##############################################
-#2.4.3 Disable Screen Sharing We Need this for Jamf Pro
-
+# 2.4.3 Disable the printer sharing service
+cupsctl --no-share-printers
 # Disable for all installed printer objects
-
-lpstat -p | awk ‘{print $2}’| xargs -I{} lpadmin -p {} -o printer-is-shared=false
-
+#lpstat -p | awk '{print $2}'| xargs -I{} lpadmin -p {} -o printer-is-shared=false
+# Line does nothing
 echo $(date) "2.4.4 Disable Print Sharing completed." >> /var/log/GSAlog
-
+##############################################
+# 2.4.5 Disable Remote Login
 # Remove the existing SSH access group (revert to all user access) not done due to client needs
 #dseditgroup -o delete -t group com.apple.access_ssh
-
 # Create the access group again anew
 #dseditgroup -o create -q com.apple.access_ssh
-
 # Add the Casper Management account (very important!)
 #dseditgroup -o edit -a caspermgt -t user com.apple.access_ssh
-
 # Add the standard local admin management account
 #dseditgroup -o edit -a Administrator -t user com.apple.access_ssh
-
 # Make sure that SSH is enabled
 #systemsetup -setremotelogin on
-
-#2.4.7 Disable Bluetooth Sharing thus is a UBE
-
+# echo $(date) "2.4.5 Disable Remote Login completed." >> /var/log/GSAlog
+##############################################
+# 2.4.6 Disable DVD or CD Sharing - Incomplete
+##############################################
+# 2.4.7 Disable Bluetooth Sharing thus is a UBE - Incomplete
+##############################################
+# 2.4.8 Disable File Sharing - 
 launchctl unload -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
 launchctl unload -w /System/Library/LaunchDaemons/com.apple.smbd.plist
 echo $(date) "2.4.8 Disable AFP File Sharing completed." >> /var/log/GSAlog
-
+##############################################
+# 2.4.9 Disable Remote Management
 /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate -configure -access -off
-
 echo $(date) "2.4.8 Disable ARD remote managment completed." >> /var/log/GSAlog
-
-#2.5.1 Disable wake on network access is done via profile
-
-#2.6.2 Enable Gatekeeper is done via Profile
-
-#2.6.3 Enable Firewall set via profile
-
-#2.6.4 Enable Firewall Stealth Mode set via profile
-
-#2.6.5 How many apps in the AF this is a simple check only
-
-#2.7.x iCloud configuration  done via profile
-#ls /Users/ | while read USERS ;
-#do
-	#if [ -d /Users/$USERS/Library/Preferences/ ];
-	#then  
-		#rm $USERS/Library/Preferences/MobileMeAccounts.plist
-	#fi
-#done
-#echo $(date) "Disable iCloud configuration completed." >> /var/log/GSAlog
-
-#2.8 timemachine 
-defaults write /Library/Preferences/com.apple.TimeMachine.plist AutoBackup 1
-
-
-#2.9 disable IR done via JAMF
-
-#3.1 Configure asl.conf
-days="90"
-
+##############################################
+# 2.5.1 Disable "wake for network access" - Config Profile - Energy Savings
+# 2.5.2 Disable sleeping the computer when connected to power - Config Profile - Energy Savings
+# 2.6.1 Enable FileVault - FileVault is enabled via Local Support during provisioning time per the Mac Setup SOP.
+# FV configuration is centrally managed via JAMFPro/JSS. Configuration provided as requested
+# 2.6.2 Enable Gatekeeper - Config Profile - GSA Security
+# 2.6.3 Enable Firewall - Config Profile - GSA Security
+# 2.6.4 Enable Firewall - Config Profile - GSA Security
+# 2.6.5 How many apps in the AF this is a simple check only - Incomplete
+# 2.6.6 Enable Location Services - Disabled via Config Profile - GSA Settings-Custom
+# 2.6.7 Monitor Location Services Access
+# 2.7.1-5 iCloud Configuration - Config Profile - GSA system preference settings
+##############################################
+# 2.8.1 Time Machine Auto-Backup 
+/usr/bin/tmutil disable
+defaults write /Library/Preferences/com.apple.TimeMachine.plist AutoBackup 0
+# defaults write /Library/Preferences/com.apple.TimeMachine.plist DoNotOfferNewDisksForBackup Incomplete
+echo $(date) "2.8.1 Time Machine Disabled" >> /var/log/GSAlog
+##############################################
+# 2.9 Pair the remote control infrared receiver if enabled - Incomplete
+##############################################
+# 3.1 Configure asl.conf
+days="180"
 sed -ie 's/ttl=./ttl='$days'/' /etc/asl.conf
 killall cfprefsd
-echo $(date) "Configure asl.conf completed." >> /var/log/GSAlog
-
+echo $(date) "3.1 Configure asl.conf completed." >> /var/log/GSAlog
+##############################################
 #3.2 Enable security auditing
 launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist
 echo $(date) "Enable security auditing completed." >> /var/log/GSAlog
