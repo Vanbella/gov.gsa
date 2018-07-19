@@ -218,6 +218,26 @@ echo $(date) "Secure Open Library Folders complete." >> /var/log/GSAlog
 ##############################################
 # 5.2.1 Configure Account Lockout Threshold - Incomplete
 ##############################################
+# 5.2.2 Set Minimum Password Length - Incomplete
+##############################################
+# 5.2.3 Complex Passwords Must Contain an Alphabetic Character - Unscored
+##############################################
+# 5.2.4 Complex Passwords Must Contain a Numeric Character - Unscored
+##############################################
+# 5.2.5 Complex Passwords Must Contain a Special Character - Unscored
+##############################################
+# 5.2.6 Complex Passwords Must Contain Uppercase and Lowercase Letters - Unscored
+##############################################
+# 5.2.7 Password Age - Incomplete
+##############################################
+# 5.2.8 Password History - Incomplete
+##############################################
+# 5.3 Reduce the Sudo Timeout Perios - Incomplete 
+##############################################
+# 5.4 Automatically Lock the Login Keychain for Inactivity - Exception allowed
+##############################################
+# 5.5 Ensure Login Keychain is Locked When the Computer Sleeps - Exception allowed
+##############################################
 # 5.6 Enable OCSP and CRL certificate checking
 defaults write com.apple.security.revocation CRLSufficientPerCert -int 1
 defaults write com.apple.security.revocation CRLStyle -string RequireIfPresent
@@ -226,16 +246,26 @@ defaults write com.apple.security.revocation OCSPStyle -string RequireIfPresent
 defaults write com.apple.security.revocation RevocationFirst -string OCSP
 echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GSAlog
 ##############################################
-#5.7 Disable root user this is off by default and checked by Jamf Pro
-
+#5.7 Do Not Enable the Root account
+##############################################
 #5.8 Disable automatic login done via Profile
-
-#5.9 Require password on wake done via profile
-
-#5.11 Disable Login to Other Active User Sessions done via profile
-
-#5.15 Disable Fast User Switching done via profile
-
+##############################################
+#5.9 Require Password to Wake the Computer from Sleep or Screensaver - don wake done via profile
+##############################################
+# 5.10 Require an Administrator Password to Access System-Wide Preferences
+##############################################
+#5.11 Disable Login to Another User's Active and Locked Session -  done via profile
+##############################################
+# 5.12 Create a Custom Mesage for the Login Screen - 
+##############################################
+# 5.13 Create a Login Window Banner
+##############################################
+# 5.14 Do Not Enter a Password-Related Hint - Unscored
+##############################################
+#5.15 Disable Fast User Switching - done via profile - Unscored
+##############################################
+# 5.16 Secure Individual Keychains and Items
+##############################################
 #5.18 Enable SIP on by default
 csrutil clear
 echo $(date) "Enable SIP on by default complete." >> /var/log/GSAlog
