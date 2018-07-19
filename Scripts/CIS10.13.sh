@@ -1,119 +1,96 @@
 #!/bin/bash
 #  10.12.x CIS implementation script.
 #  By Ian F Bell 04/17
+#  Updated JFG 19.7.2018
 ##############################################
 
 sw_vers=$(sw_vers -productVersion)
 csrstat=$""
-# halt run on anything but 10.11 or higher
-if [[ $sw_vers < 10.12.* ]]; then 
-osascript -e 'tell app "System Events" to display alert "This script is for OS versions 10.12.x only!"'; exit 1
-fi
 
 # 1.2 Enable Auto Update
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool TRUE
-defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool FALSE
-
+defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticDownload -bool TRUE
 softwareupdate --schedule on
 echo $(date) "1.2 Enable Auto Update enabled" >> /var/log/GSAlog
-
+##############################################
 # 1.3 Enable App Update Installs
 defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool FALSE
-
 echo $(date) "1.3 Enable App Update Installs enabled." >> /var/log/GSAlog
-
+##############################################
 # 1.4 Enable system and security installs
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool TRUE
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool TRUE
-
 echo $(date) "1.4 Enable system and security installs enabled." >> /var/log/GSAlog
-
+##############################################
 # 1.5 Enable OS X Update Installs
 defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRequired -bool FALSE
-
 echo $(date) "1.5 Enable OS X Update Installs enabled." >> /var/log/GSAlog
-
+##############################################
 # 2.1.1 Bluetooth this is a UBE currently. all bluetooth managent is handled by a specific bluetooth policy
 # defaults write com.apple.Bluetooth.plist ControllerPowerState -int 0
-
 # killall -HUP blued
-
-#echo $(date) "2.1.1 Bluetooth is a UBE currently." >> /var/log/GSAlog
-
+echo $(date) "2.1.1 Bluetooth is a UBE currently." >> /var/log/GSAlog
+##############################################
 # 2.1.3 Bluetooth Menu Bar
-#defaults write com.apple.systemuiserver.plist menuExtras -array-add "/System/Library/CoreServices/Menu Extras/Bluetooth.menu"
-#echo $(date) "2.1.3 Bluetooth Menu Bar enabled." >> /var/log/GSAlog
-
+# Moved to "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
+##############################################
 # 2.2.1 Enable Set time and date automatically
-
 /bin/cat > /etc/ntp.conf << 'NEW_NTP_CONF'
 server ent.ds.gsa.gov
 server time.nist.gov
 server time.apple.com
 NEW_NTP_CONF
-
 echo $(date) "2.2.1 Enable Set time and date automatically enabled." >> /var/log/GSAlog
-
+##############################################
 # 2.2.2 Time set within appropriate limits
-
 # Get the current time drift. We're looking for between -270 and 270 seconds.
 # Convert negative to positive numbers for easier processing later.
 drift=$( ntpdate -svd time.gsa.gov | egrep offset | sed 's/-//g' )
-
 # Are we out of sync? Use bc as we're dealing with floating point numbers
 if (( $(bc <<< "$drift <= 270") ))
 then
 	ntpd -g -x -q
 fi
 echo $(date) "2.2.2 Time set within appropriate limits enabled." >> /var/log/GSAlog
-
-
-user=$( python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");' )
-
+##############################################
+user=`who|grep console|awk '{print $1}'`
 tlcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner )
 trcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner )
 blcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner )
 brcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-br-corner )
-
+#
 if [ "$tlcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner -int 1
 fi
-
+#
 if [ "$trcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner -int 1	
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner -int 1	
 fi
-
+#
 if [ "$blcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner -int 1
 fi
-
+#
 if [ "$brcorner" = "6" ];
 then
-	defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-br-corner -int 1
+sudo -u $user defaults write /Users/$user/Library/Preferences/com.apple.dock wvous-br-corner -int 1
 fi
 echo $(date) "2.3.2 hot corner check completed." >> /var/log/GSAlog
-
-#!/bin/bash
-
+##############################################
 # Disable Remote Apple Events
-
 systemsetup -setremoteappleevents off
-
 echo $(date) "2.4.1 Disable Remote Apple Events completed." >> /var/log/GSAlog
-
+##############################################
 # Disable Internet Sharing
-
 defaults write /Library/Preferences/SystemConfiguration/com.apple.nat NAT -dict-add Enabled -int 0
-
 echo $(date) "2.4.2 Disable Internet Sharing completed." >> /var/log/GSAlog
-
+##############################################
 # Disable the printer sharing service
-
 cupsctl --no-share-printers
-
+##############################################
 #2.4.3 Disable Screen Sharing We Need this for Jamf Pro
 
 # Disable for all installed printer objects
