@@ -13,19 +13,19 @@ echo $(date) "1.2 Enable Auto Update enabled" >> /var/log/GSAlog
 ##############################################
 # 1.3 Enable App Update Installs
 defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdate -bool FALSE
-echo $(date) "1.3 Enable App Update Installs enabled." >> /var/log/GSAlog
+echo $(date) "1.3 Enable App Update Installs completed." >> /var/log/GSAlog
 ##############################################
 # 1.4 Enable system and security installs
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool TRUE
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool TRUE
-echo $(date) "1.4 Enable System & Security installs enabled." >> /var/log/GSAlog
+echo $(date) "1.4 Enable System & Security installs completed." >> /var/log/GSAlog
 ##############################################
 # 1.5 Enable OS X Update Installs
 defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRequired -bool FALSE
-echo $(date) "1.5 Enable OS X Update Installs enabled." >> /var/log/GSAlog
+echo $(date) "1.5 Enable OS X Update Installs completed." >> /var/log/GSAlog
 ##############################################
-# 2.1.1 Bluetooth this is a UBE currently. all bluetooth managent is handled by a specific bluetooth policy
-echo $(date) "2.1.1 Bluetooth is currently UBE." >> /var/log/GSAlog
+# 2.1.1 Turn off Bluetooth, if no paired devices. 
+echo $(date) "2.1.1 Turn off Bluetooth, if no paired devices. Currently UBE." >> /var/log/GSAlog
 ##############################################
 # 2.1.3 Show Bluetooth Status in the Menu Bar
 # Also exists in "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
@@ -41,7 +41,7 @@ server ent.ds.gsa.gov
 server time.nist.gov
 server time.apple.com
 NEW_NTP_CONF
-echo $(date) "2.2.1 Enable Set time and date automatically enabled." >> /var/log/GSAlog
+echo $(date) "2.2.1 Enable Set time and date automatically completed." >> /var/log/GSAlog
 ##############################################
 # 2.2.2 Time set within appropriate limits
 # Get the current time drift. We're looking for between -270 and 270 seconds.
@@ -51,7 +51,7 @@ drift=$( ntpdate -svd time.gsa.gov | egrep offset | sed 's/-//g' )
 if (( $(bc <<< "$drift <= 270") )); then
 ntpd -g -x -q
 fi
-echo $(date) "2.2.2 Time set within appropriate limits enabled." >> /var/log/GSAlog
+echo $(date) "2.2.2 Time set within appropriate limits completed." >> /var/log/GSAlog
 ##############################################
 # 2.2.3 Restrict NTP server to loopback interface - Incomplete
 ##############################################
@@ -86,9 +86,11 @@ echo $(date) "2.3.2 hot corner check completed." >> /var/log/GSAlog
 ##############################################
 # 2.3.3 Verify Display Sleep is set to a value larger than the Screen Saver
 # Config Profile "Energey Savings" Desktop/Laptop(Bat&AC) 15 mins
+echo $(date) "2.3.3 Verify Display Sleep is set to a value larger than the Screen Saver. Config Profile "Energey Savings" Desktop/Laptop(Bat&AC) 15 mins" >> /var/log/GSAlog
 ##############################################
-# 2.3.4 10.13 Exceptions List - 3 methods
+# 2.3.4 Set a Screen Corner to Start Screen Saver - Exception, 3 methods provided
 # 1. Apple Menu "Lock Screen" 2. Key sequence of ^+command+q 3. Menubar / NoMAD "Lock Screen"
+echo $(date) "2.3.4 Set a Screen Corner to Start Screen Saver - Exception, 3 methods provided" >> /var/log/GSAlog
 ##############################################
 # 2.4.1 Disable Remote Apple Events
 systemsetup -setremoteappleevents off
@@ -133,6 +135,7 @@ if [ "$btshr" = "true" ]; then
 killall cfprefsd
 # Possibly do this at conclusion?
 fi
+echo $(date) "2.4.7 Disable Bluetooth Sharing completed" >> /var/log/GSAlog
 ##############################################
 # 2.4.8 Disable File Sharing - 
 launchctl unload -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
@@ -158,15 +161,15 @@ echo $(date) "2.4.8 Disable ARD remote managment completed." >> /var/log/GSAlog
 /usr/bin/tmutil disable
 defaults write /Library/Preferences/com.apple.TimeMachine.plist AutoBackup 0
 # defaults write /Library/Preferences/com.apple.TimeMachine.plist DoNotOfferNewDisksForBackup Incomplete
-echo $(date) "2.8.1 Time Machine Disabled" >> /var/log/GSAlog
+echo $(date) "2.8.1 Time Machine Disabled completed" >> /var/log/GSAlog
 ##############################################
 # 2.9 Pair the remote control infrared receiver if enabled
 /usr/bin/defaults write /Library/Preferences/com.apple.driver.AppleIRController DeviceEnabled -bool no
-echo $(date) "2.9 Pair the remote control infrared receiver if enabled Disabled" >> /var/log/GSAlog
+echo $(date) "2.9 Pair the remote control infrared receiver if enabled completed" >> /var/log/GSAlog
 ##############################################
 # 2.10 Enable Secure Keyboard Entry in Terminal.app - Incomplete
 defaults write /Users/"$user"/Library/Preferences/com.apple.Terminal SecureKeyboardEntry -bool true
-echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app Enabled" >> /var/log/GSAlog
+echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app completed" >> /var/log/GSAlog
 ##############################################
 # 2.11 Java 6 is not the default Java runtime - Incomplete
 ##############################################
@@ -208,36 +211,36 @@ echo $(date) "Show WiFi Status in Menu Bar completed." >> /var/log/GSAlog
 # 4.4 Disable HTTP service
 apachectl stop
 defaults write /System/Library/LaunchDaemons/org.apache.httpd Disabled -bool true
-echo $(date) "Disable HTTP service complete." >> /var/log/GSAlog
+echo $(date) "Disable HTTP service completed." >> /var/log/GSAlog
 ##############################################
 # 4.5 Disable FTP service
 launchctl unload -w /System/Library/LaunchDaemons/ftp.plist
-echo $(date) "Disable FTP service complete." >> /var/log/GSAlog
+echo $(date) "Disable FTP service completed." >> /var/log/GSAlog
 ##############################################
 # 4.6 Disable NFS service
 nfsd disable
 rm /etc/export
-echo $(date) "Disable NFS service complete." >> /var/log/GSAlog
+echo $(date) "Disable NFS service completed." >> /var/log/GSAlog
 ##############################################
 # 5.1.1 Secure Home Folders
 for userDirs in $( find /Users -mindepth 1 -maxdepth 1 -type d -perm -1 | grep -v "Shared" | grep -v "Guest" ); do chmod -R og-rwx "$userDirs"
 	done
- echo $(date) "Secure Home Folders complete." >> /var/log/GSAlog
+ echo $(date) "Secure Home Folders completed." >> /var/log/GSAlog
 ##############################################
 # 5.1.2 Secure System Wide Applications Folder
 find /Applications -type d -exec chmod -R 755 {} + 2> /dev/null
 find /Applications -type d -exec chown root:wheel {} + 2> /dev/null
-echo $(date) "Secure System Wide Applications Folder complete." >> /var/log/GSAlog
+echo $(date) "Secure System Wide Applications Folder completed." >> /var/log/GSAlog
 ##############################################
 # 5.1.3 Check System for World Writable Files
 for apps in $( find /Applications -iname "*\.app" -type d -perm -2 -ls ); do chmod -R o-w "$apps"
 done
-echo $(date) "5.1.3 Check System for World Writable Files complete." >> /var/log/GSAlog
+echo $(date) "5.1.3 Check System for World Writable Files completed." >> /var/log/GSAlog
 ##############################################
 # 5.1.4 Check Library Folder for World Writable Files
 # for libPermissions in $( find /Library -type d -perm -2 -ls | grep -v Caches | grep -v Adobe); do chmod -R o-w "$libPermissions"
 done
-echo $(date) "Secure Open Library Folders complete." >> /var/log/GSAlog
+echo $(date) "Secure Open Library Folders completed." >> /var/log/GSAlog
 ##############################################
 # 5.2.1 Configure Account Lockout Threshold - Incomplete
 ##############################################
@@ -271,7 +274,7 @@ echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GS
 ##############################################
 #5.7 Do Not Enable the Root account
 pwpolicy -disableuser -u root
-echo $(date) "5.7 Do Not Enable the Root account disabled" >> /var/log/GSAlog
+echo $(date) "5.7 Do Not Enable the Root account completed" >> /var/log/GSAlog
 ##############################################
 #5.8 Disable Automatic Login - Disabled via Config Profile - GSA Login config
 ##############################################
@@ -283,7 +286,7 @@ if [ "$adminSysPrefs" = "1" ]; then
 	security authorizationdb read system.preferences > /tmp/system.preferences.plist
 	/usr/libexec/PlistBuddy -c "Set :shared false" /tmp/system.preferences.plist
 	security authorizationdb write system.preferences < /tmp/system.preferences.plist
- echo $(date) "Require an Administrator Password to Access System-Wide Preferences complete." >> /var/log/GSAlog
+ echo $(date) "Require an Administrator Password to Access System-Wide Preferences completed." >> /var/log/GSAlog
 ##############################################
 #5.11 Disable Login to Another User's Active and Locked Session -  "done via profile"???
 screensaverGroups=$(grep -c "group=admin,wheel fail_safe" /etc/pam.d/screensaver)
