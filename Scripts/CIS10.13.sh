@@ -1,7 +1,6 @@
 #!/bin/bash
-#  10.12.x CIS implementation script.
-#  By Ian F Bell 04/17
-#  Updated JFG 19.7.2018
+#  10.13.x CIS implementation script.
+# 
 ##############################################
 # 1.2 Enable Auto Update
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool TRUE
@@ -16,7 +15,7 @@ echo $(date) "1.3 Enable App Update Installs enabled." >> /var/log/GSAlog
 # 1.4 Enable system and security installs
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist ConfigDataInstall -bool TRUE
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist CriticalUpdateInstall -bool TRUE
-echo $(date) "1.4 Enable system and security installs enabled." >> /var/log/GSAlog
+echo $(date) "1.4 Enable System & Security installs enabled." >> /var/log/GSAlog
 ##############################################
 # 1.5 Enable OS X Update Installs
 defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRequired -bool FALSE
@@ -29,6 +28,7 @@ echo $(date) "2.1.1 Bluetooth is a UBE currently." >> /var/log/GSAlog
 ##############################################
 # 2.1.3 Bluetooth Menu Bar
 # Moved to "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
+echo $(date) "2.1.3 Bluetooth is a UBE currently." >> /var/log/GSAlog
 ##############################################
 # 2.2.1 Enable Set time and date automatically
 /bin/cat > /etc/ntp.conf << 'NEW_NTP_CONF'
@@ -247,6 +247,8 @@ defaults write com.apple.security.revocation RevocationFirst -string OCSP
 echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GSAlog
 ##############################################
 #5.7 Do Not Enable the Root account
+pwpolicy -disableuser -u root
+echo $(date) "Root user disabled" >> /var/log/GSAlog
 ##############################################
 #5.8 Disable automatic login done via Profile
 ##############################################
@@ -266,10 +268,10 @@ echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GS
 ##############################################
 # 5.16 Secure Individual Keychains and Items
 ##############################################
-#5.18 Enable SIP on by default
-csrutil clear
-echo $(date) "Enable SIP on by default complete." >> /var/log/GSAlog
-
+# 5.18 Enable SIP on by default
+csrsts=`csrutil status|awk '{print $5}'`
+echo $(date) "System Integrity Protection status: $csrsts" >> /var/log/GSAlog
+##############################################
 #6.1.3 Disable Guest Account done via profile
 
 #6.1.5 remove guest home folder
