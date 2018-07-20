@@ -165,6 +165,8 @@ echo $(date) "2.8.1 Time Machine Disabled" >> /var/log/GSAlog
 echo $(date) "2.9 Pair the remote control infrared receiver if enabled Disabled" >> /var/log/GSAlog
 ##############################################
 # 2.10 Enable Secure Keyboard Entry in Terminal.app - Incomplete
+defaults write /Users/"$user"/Library/Preferences/com.apple.Terminal SecureKeyboardEntry -bool true
+echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app Enabled" >> /var/log/GSAlog
 ##############################################
 # 2.11 Java 6 is not the default Java runtime - Incomplete
 ##############################################
