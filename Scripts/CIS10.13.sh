@@ -1,8 +1,9 @@
 #!/bin/bash
 #  10.13.x CIS implementation script.
-# Variables
+# Global Variables
 ##############################################
 user=`who|grep console|awk '{print $1}'`
+hardwareUUID=$(/usr/sbin/system_profiler SPHardwareDataType | grep "Hardware UUID" | awk -F ": " '{print $2}' | xargs)
 ##############################################
 # 1.2 Enable Auto Update
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool TRUE
@@ -24,11 +25,10 @@ defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRe
 echo $(date) "1.5 Enable OS X Update Installs enabled." >> /var/log/GSAlog
 ##############################################
 # 2.1.1 Bluetooth this is a UBE currently. all bluetooth managent is handled by a specific bluetooth policy
-echo $(date) "2.1.1 Bluetooth is a UBE currently." >> /var/log/GSAlog
+echo $(date) "2.1.1 Bluetooth is currently UBE." >> /var/log/GSAlog
 ##############################################
 # 2.1.3 Show Bluetooth Status in the Menu Bar
 # Also exists in "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
-user=$( ls -l /dev/console | awk '{print $3}' )
 btmn=$(grep "Bluetooth.menu" /Users/$user/Library/Preferences/com.apple.systemuiserver.plist -c)
 if [ $btmn == 0 ]; then
 open '/System/Library/CoreServices/Menu Extras/Bluetooth.menu'
@@ -48,15 +48,14 @@ echo $(date) "2.2.1 Enable Set time and date automatically enabled." >> /var/log
 # Convert negative to positive numbers for easier processing later.
 drift=$( ntpdate -svd time.gsa.gov | egrep offset | sed 's/-//g' )
 # Are we out of sync? Use bc as we're dealing with floating point numbers
-if (( $(bc <<< "$drift <= 270") ))
-then
-	ntpd -g -x -q
+if (( $(bc <<< "$drift <= 270") )); then
+ntpd -g -x -q
 fi
 echo $(date) "2.2.2 Time set within appropriate limits enabled." >> /var/log/GSAlog
 ##############################################
 # 2.2.3 Restrict NTP server to loopback interface - Incomplete
 ##############################################
-# 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Not Complete
+# 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Incomplete
 ##############################################
 # 2.3.2 Secure screen saver corners
 tlcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner )
@@ -105,8 +104,8 @@ echo $(date) "2.4.2 Disable Internet Sharing completed." >> /var/log/GSAlog
 # 2.4.3 Disable the printer sharing service
 cupsctl --no-share-printers
 # Disable for all installed printer objects
-#lpstat -p | awk '{print $2}'| xargs -I{} lpadmin -p {} -o printer-is-shared=false
-# Line does nothing
+# lpstat -p | awk '{print $2}'| xargs -I{} lpadmin -p {} -o printer-is-shared=false
+# Line above does nothing
 echo $(date) "2.4.4 Disable Print Sharing completed." >> /var/log/GSAlog
 ##############################################
 # 2.4.5 Disable Remote Login
@@ -126,7 +125,14 @@ echo $(date) "2.4.4 Disable Print Sharing completed." >> /var/log/GSAlog
 launchctl unload -w /System/Library/LaunchDaemons/com.apple.ODSAgent.plist'
 echo $(date) "2.4.6 Disable DVD & CD Sharing completed" >> /var/log/GSAlog
 ##############################################
-# 2.4.7 Disable Bluetooth Sharing thus is a UBE - Incomplete
+# 2.4.7 Disable Bluetooth Sharing
+btshr=$(/usr/libexec/PlistBuddy -c "print :PrefKeyServicesEnabled"  /Users/"$user"/Library/Preferences/ByHost/com.apple.Bluetooth."$hardwareUUID".plist)
+if [ "$btshr" = "true" ]; then
+/usr/libexec/PlistBuddy -c "Delete :PrefKeyServicesEnabled"  /Users/"$user"/Library/Preferences/ByHost/com.apple.Bluetooth."$hardwareUUID".plist
+/usr/libexec/PlistBuddy -c "Add :PrefKeyServicesEnabled bool false"  /Users/"$user"/Library/Preferences/ByHost/com.apple.Bluetooth."$hardwareUUID".plist
+killall cfprefsd
+# Possibly do this globally at conclusion?
+fi
 ##############################################
 # 2.4.8 Disable File Sharing - 
 launchctl unload -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
@@ -139,8 +145,7 @@ echo $(date) "2.4.8 Disable ARD remote managment completed." >> /var/log/GSAlog
 ##############################################
 # 2.5.1 Disable "wake for network access" - Config Profile - Energy Savings
 # 2.5.2 Disable sleeping the computer when connected to power - Config Profile - Energy Savings
-# 2.6.1 Enable FileVault - FileVault is enabled via Local Support during provisioning time per the Mac Setup SOP.
-# FV configuration is centrally managed via JAMFPro/JSS. Configuration provided as requested
+# 2.6.1 Enable FileVault - FileVault is enabled via Local Support during provisioning time per the Mac Setup SOP. FV configuration is centrally managed via JAMFPro/JSS. Configuration provided as requested
 # 2.6.2 Enable Gatekeeper - Config Profile - GSA Security
 # 2.6.3 Enable Firewall - Config Profile - GSA Security
 # 2.6.4 Enable Firewall - Config Profile - GSA Security
