@@ -147,15 +147,31 @@ echo $(date) "2.4.8 Disable AFP File Sharing completed." >> /var/log/GSAlog
 echo $(date) "2.4.8 Disable ARD remote managment completed." >> /var/log/GSAlog
 ##############################################
 # 2.5.1 Disable "wake for network access" - Config Profile - Energy Savings
+echo $(date) "2.5.1 Disable "wake for network access" - Provided via Config Profile - Energy Savings." >> /var/log/GSAlog
+##############################################
 # 2.5.2 Disable sleeping the computer when connected to power - Config Profile - Energy Savings
+echo $(date) "2.5.2 Disable sleeping the computer when connected to power - Config Profile - Energy Savings" >> /var/log/GSAlog
+##############################################
 # 2.6.1 Enable FileVault - FileVault is enabled via Local Support during provisioning time per the Mac Setup SOP. FV configuration is centrally managed via JAMFPro/JSS. Configuration provided as requested
+echo $(date) "2.6.1 Enable FileVault - FileVault is enabled via Local Support during provisioning time per the Mac Setup SOP. FV configuration is centrally managed via JAMFPro/JSS. Configuration provided as requested" >> /var/log/GSAlog
+##############################################
 # 2.6.2 Enable Gatekeeper - Config Profile - GSA Security
+echo $(date) "2.6.2 Enable Gatekeeper - Config Profile - GSA Security" >> /var/log/GSAlog
+##############################################
 # 2.6.3 Enable Firewall - Config Profile - GSA Security
+echo $(date) "2.6.3 Enable Firewall - Config Profile - GSA Security" >> /var/log/GSAlog
+##############################################
 # 2.6.4 Enable Firewall - Config Profile - GSA Security
+echo $(date) "2.6.4 Enable Firewall - Config Profile - GSA Security" >> /var/log/GSAlog
+##############################################
 # 2.6.5 How many apps in the AF this is a simple check only - Incomplete
-# 2.6.6 Enable Location Services - Disabled via Config Profile - GSA Settings-Custom
+##############################################
+# 2.6.6 Enable Location Services - Disabled via Config Profile - GSA Settings-Custom - Incomplete
+##############################################
 # 2.6.7 Monitor Location Services Access
+##############################################
 # 2.7.1-5 iCloud Configuration - Config Profile - GSA system preference settings
+echo $(date) "2.7.1-5 iCloud Configuration - Config Profile - GSA system preference settings" >> /var/log/GSAlog
 ##############################################
 # 2.8.1 Time Machine Auto-Backup 
 /usr/bin/tmutil disable
@@ -195,6 +211,7 @@ sed -ie 's/^flags\(.*\)/flags:'$flags'/' /etc/security/audit_control
 echo $(date) "Configure security auditing flags completed." >> /var/log/GSAlog
 ##############################################
 # 3.4 Enable remote logging for Desktops on trusted networks - Exception allowed line 10
+echo $(date) "3.4 Enable remote logging for Desktops on trusted networks - Exception allowed line 10" >> /var/log/GSAlog
 ##############################################
 # 3.5 Retain install.log for 365 or more days - GSA requires 180 - Achieved via 3.1.1
 ##############################################
