@@ -1,6 +1,8 @@
 #!/bin/bash
 #  10.13.x CIS implementation script.
-# 
+# Variables
+##############################################
+user=`who|grep console|awk '{print $1}'`
 ##############################################
 # 1.2 Enable Auto Update
 defaults write /Library/Preferences/com.apple.SoftwareUpdate.plist AutomaticCheckEnabled -bool TRUE
@@ -22,13 +24,16 @@ defaults write /Library/Preferences/com.apple.commerce.plist AutoUpdateRestartRe
 echo $(date) "1.5 Enable OS X Update Installs enabled." >> /var/log/GSAlog
 ##############################################
 # 2.1.1 Bluetooth this is a UBE currently. all bluetooth managent is handled by a specific bluetooth policy
-# defaults write com.apple.Bluetooth.plist ControllerPowerState -int 0
-# killall -HUP blued
 echo $(date) "2.1.1 Bluetooth is a UBE currently." >> /var/log/GSAlog
 ##############################################
-# 2.1.3 Bluetooth Menu Bar
-# Moved to "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
-echo $(date) "2.1.3 Bluetooth is a UBE currently." >> /var/log/GSAlog
+# 2.1.3 Show Bluetooth Status in the Menu Bar
+# Also exists in "Add Bluetooth to Menu Bar" policy (Once every week/Check-in/All Comp/All User)
+user=$( ls -l /dev/console | awk '{print $3}' )
+btmn=$(grep "Bluetooth.menu" /Users/$user/Library/Preferences/com.apple.systemuiserver.plist -c)
+if [ $btmn == 0 ]; then
+open '/System/Library/CoreServices/Menu Extras/Bluetooth.menu'
+fi
+echo $(date) "Show Bluetooth Status in the Menu Bar completed" >> /var/log/GSAlog
 ##############################################
 # 2.2.1 Enable Set time and date automatically
 /bin/cat > /etc/ntp.conf << 'NEW_NTP_CONF'
@@ -54,7 +59,6 @@ echo $(date) "2.2.2 Time set within appropriate limits enabled." >> /var/log/GSA
 # 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Not Complete
 ##############################################
 # 2.3.2 Secure screen saver corners
-user=`who|grep console|awk '{print $1}'`
 tlcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner )
 trcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tr-corner )
 blcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-bl-corner )
@@ -119,6 +123,8 @@ echo $(date) "2.4.4 Disable Print Sharing completed." >> /var/log/GSAlog
 # echo $(date) "2.4.5 Disable Remote Login completed." >> /var/log/GSAlog
 ##############################################
 # 2.4.6 Disable DVD or CD Sharing - Incomplete
+launchctl unload -w /System/Library/LaunchDaemons/com.apple.ODSAgent.plist'
+echo $(date) "2.4.6 Disable DVD & CD Sharing completed" >> /var/log/GSAlog
 ##############################################
 # 2.4.7 Disable Bluetooth Sharing thus is a UBE - Incomplete
 ##############################################
