@@ -199,7 +199,9 @@ echo $(date) "Configure security auditing flags completed." >> /var/log/GSAlog
 defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
 echo $(date) "Disable Bonjour advertising service completed." >> /var/log/GSAlog
 ##############################################
-# 4.2 WiFi Menu Bar done via policy in JAMF - Per User setting. Must be enforced via JAMF policy in ongoing manner
+# 4.2 Enable "Show WiFi Status in Menu Bar"
+open /System/Library/CoreServices/Menu\ Extras/AirPort.menu
+echo $(date) "Show WiFi Status in Menu Bar completed." >> /var/log/GSAlog
 ##############################################
 # 4.3 Create Network specific locations - Exception allowed
 ##############################################
@@ -217,18 +219,24 @@ nfsd disable
 rm /etc/export
 echo $(date) "Disable NFS service complete." >> /var/log/GSAlog
 ##############################################
-# 5.1.1 Secure Home Folders - Incomplete
+# 5.1.1 Secure Home Folders
+for userDirs in $( find /Users -mindepth 1 -maxdepth 1 -type d -perm -1 | grep -v "Shared" | grep -v "Guest" ); do chmod -R og-rwx "$userDirs"
+	done
+ echo $(date) "Secure Home Folders complete." >> /var/log/GSAlog
 ##############################################
 # 5.1.2 Secure System Wide Applications Folder
 find /Applications -type d -exec chmod -R 755 {} + 2> /dev/null
 find /Applications -type d -exec chown root:wheel {} + 2> /dev/null
 echo $(date) "Secure System Wide Applications Folder complete." >> /var/log/GSAlog
 ##############################################
-# 5.1.3 Check System for World Writable Files - Incomplete
+# 5.1.3 Check System for World Writable Files
+for apps in $( find /Applications -iname "*\.app" -type d -perm -2 -ls ); do chmod -R o-w "$apps"
+done
+echo $(date) "5.1.3 Check System for World Writable Files complete." >> /var/log/GSAlog
 ##############################################
 # 5.1.4 Check Library Folder for World Writable Files
-# CIS 5.1.4 - Curtesy of Owen Pragel (owen dot pragel @ 74bit dot com)
-find /Library -type d -exec chmod -R o-w {} +
+# for libPermissions in $( find /Library -type d -perm -2 -ls | grep -v Caches | grep -v Adobe); do chmod -R o-w "$libPermissions"
+done
 echo $(date) "Secure Open Library Folders complete." >> /var/log/GSAlog
 ##############################################
 # 5.2.1 Configure Account Lockout Threshold - Incomplete
@@ -263,46 +271,88 @@ echo $(date) "Enable OCSP and CRL certificate checking complete." >> /var/log/GS
 ##############################################
 #5.7 Do Not Enable the Root account
 pwpolicy -disableuser -u root
-echo $(date) "Root user disabled" >> /var/log/GSAlog
+echo $(date) "5.7 Do Not Enable the Root account disabled" >> /var/log/GSAlog
 ##############################################
-#5.8 Disable automatic login done via Profile
+#5.8 Disable Automatic Login - Disabled via Config Profile - GSA Login config
 ##############################################
-#5.9 Require Password to Wake the Computer from Sleep or Screensaver - don wake done via profile
+#5.9 Require Password to Wake the Computer from Sleep or Screensaver - Disabled via Config Profile - GSA Security
 ##############################################
 # 5.10 Require an Administrator Password to Access System-Wide Preferences
+adminSysPrefs=$(security authorizationdb read system.preferences 2> /dev/null | grep -A1 shared | grep -E '(true|false)' | grep -c "true")
+if [ "$adminSysPrefs" = "1" ]; then
+	security authorizationdb read system.preferences > /tmp/system.preferences.plist
+	/usr/libexec/PlistBuddy -c "Set :shared false" /tmp/system.preferences.plist
+	security authorizationdb write system.preferences < /tmp/system.preferences.plist
+ echo $(date) "Require an Administrator Password to Access System-Wide Preferences complete." >> /var/log/GSAlog
 ##############################################
-#5.11 Disable Login to Another User's Active and Locked Session -  done via profile
+#5.11 Disable Login to Another User's Active and Locked Session -  "done via profile"???
+screensaverGroups=$(grep -c "group=admin,wheel fail_safe" /etc/pam.d/screensaver)
+	if [ "$screensaverGroups" = "1" ]; then
+			cp /etc/pam.d/screensaver /etc/pam.d/screensaver_old
+			sed "s/"group=admin,wheel\ fail_safe"/"group=wheel\ fail_safe"/g" /etc/pam.d/screensaver_old >  /etc/pam.d/screensaver
+			chmod 644 /etc/pam.d/screensaver
+			chown root:wheel /etc/pam.d/screensaver
+echo $(date) "5.11 Disable Login to Another User's Active and Locked Session completed." >> /var/log/GSAlog
 ##############################################
-# 5.12 Create a Custom Mesage for the Login Screen - 
+# 5.12 Create a Custom Mesage for the Login Screen - Provided via Config Profile - GSA Login config
+echo $(date) "5.12 Create a Custom Mesage for the Login Screen - Provided via Config Profile - GSA Login config completed." >> /var/log/GSAlog
 ##############################################
-# 5.13 Create a Login Window Banner
+# 5.13 Create a Login Window Banner - 
+# Provided via pkg "Policy Banner installer.pkg"
+# Provided via policy "Policy Banner"
+echo $(date) "5.13 Create a Login Window Banner - Provided via pkg Policy Banner installer.pkg / Provided via policy Policy Banner " >> /var/log/GSAlog
 ##############################################
-# 5.14 Do Not Enter a Password-Related Hint - Unscored
+# 5.14 Do Not Enter a Password-Related Hint - Disabled via Config Profile - GSA Login config
+echo $(date) "5.14 Do Not Enter a Password-Related Hint - Disabled via Config Profile - GSA Login config" >> /var/log/GSAlog
 ##############################################
-#5.15 Disable Fast User Switching - done via profile - Unscored
+#5.15 Disable Fast User Switching - Disabled via Config Profile - GSA Login config
+echo $(date) "5.15 Disable Fast User Switching - Disabled via Config Profile - GSA Login config" >> /var/log/GSAlog
 ##############################################
-# 5.16 Secure Individual Keychains and Items
+# 5.16 Secure Individual Keychains and Items - Unscored
 ##############################################
-# 5.18 Enable SIP on by default
+# 5.18 System Integrity Protection status
 csrsts=`csrutil status|awk '{print $5}'`
-echo $(date) "System Integrity Protection status: $csrsts" >> /var/log/GSAlog
+echo $(date) "System Integrity Protection Status: $csrsts" >> /var/log/GSAlog
 ##############################################
-#6.1.3 Disable Guest Account done via profile
-
-#6.1.5 remove guest home folder
- rm -R /Users/Guest
-echo $(date) "Removed guest home folder" >> /var/log/GSAlog
-
-#6.3 Disable safari safe file opening
-defaults write com.apple.Safari AutoOpenSafeDownloads -boolean no
-echo $(date) "Disable safari safe file opening complete." >> /var/log/GSAlog
-
-#7.8 EFI Password Status check via Jamf Pro
-
-# kills auto login for filevault
-sudo defaults write /Library/Preferences/com.apple.loginwindow DisableFDEAutoLogin -bool YES
-
-echo $(date) "Hardening script has completed." >> /var/log/GSAlog
+# 6.1.1 Display Login Window as a Name and Password
+echo $(date) "6.1.1 Display Login Window as a Name and Password - Provided via Config Profile - GSA Login config" >> /var/log/GSAlog
+##############################################
+# 6.1.2 Disable "Show Password Hints"
+echo $(date) "6.1.2 Disable Show Password Hints - Provided via Config Profile - GSA Login config" >> /var/log/GSAlog
+##############################################
+# 6.1.3 Disable Guest Account Login
+echo $(date) "6.1.3 Disable Guest Account Login - Disabled via Config Profile - GSA Login config" >> /var/log/GSAlog
+##############################################
+# 6.1.4 Disable "Allow Guests to Connect to Shared Folders"
+afpGuestEnabled=$(defaults read /Library/Preferences/com.apple.AppleFileServer guestAccess)
+	smbGuestEnabled=$(defaults read /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess)
+	if [ "$afpGuestEnabled" = "0" ] && [ "$smbGuestEnabled" = "0" ]; then
+		echo $(date) "6.1.4 Disable Allow Guests to Connect to Shared Folders completed"
+	fi
+	if [ "$afpGuestEnabled" = "1" ]; then
+		defaults write /Library/Preferences/com.apple.AppleFileServer guestAccess -bool no
+		echo $(date -u) "6.1.4 remediated" | tee -a "$logFile";
+	fi
+	if [ "$smbGuestEnabled" = "1" ]; then
+		defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server AllowGuestAccess -bool no
+		echo $(date -u) "6.1.4 remediated" | tee -a "$logFile";
+	fi
+echo $(date) "6.1.4 Disable Allow Guests to Connect to Shared Folders completed"
+##############################################
+# 6.1.5 Remove Guest Home Folder
+rm -R /Users/Guest
+echo $(date) "6.1.5 Remove Guest Home Folder completed" >> /var/log/GSAlog
+##############################################
+# 6.2 Turn on Filename Extensions - Exception
+echo $(date) "6.2 Turn on Filename Extensions - Exception" >> /var/log/GSAlog
+##############################################
+# 6.3 Disable safari safe file opening
+safariSafe=$(defaults read /Users/"$currentUser"/Library/Preferences/com.apple.Safari AutoOpenSafeDownloads)
+if [ "$safariSafe" = "1" ]; then
+	defaults write /Users/"$user"/Library/Preferences/com.apple.Safari AutoOpenSafeDownloads -bool false
+echo $(date) "6.3 Disable Safari Safe File Opening completed." >> /var/log/GSAlog
+##############################################
+echo $(date) "10.13 Hardening script has completed." >> /var/log/GSAlog
 
 
 
