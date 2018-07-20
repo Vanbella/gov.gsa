@@ -131,7 +131,7 @@ if [ "$btshr" = "true" ]; then
 /usr/libexec/PlistBuddy -c "Delete :PrefKeyServicesEnabled"  /Users/"$user"/Library/Preferences/ByHost/com.apple.Bluetooth."$hardwareUUID".plist
 /usr/libexec/PlistBuddy -c "Add :PrefKeyServicesEnabled bool false"  /Users/"$user"/Library/Preferences/ByHost/com.apple.Bluetooth."$hardwareUUID".plist
 killall cfprefsd
-# Possibly do this globally at conclusion?
+# Possibly do this at conclusion?
 fi
 ##############################################
 # 2.4.8 Disable File Sharing - 
@@ -178,9 +178,9 @@ sed -ie 's/ttl=./ttl='$days'/' /etc/asl.conf
 killall cfprefsd
 echo $(date) "3.1 Configure asl.conf completed." >> /var/log/GSAlog
 ##############################################
-# 3.1.2 Retain appfirewall.log for 90 days or more - GSA requires 180 Incomplete
+# 3.1.2 Retain appfirewall.log for 90 days or more - GSA requires 180 - Achieved via 3.1.1
 ##############################################
-# 3.1.3 Retain authd.log for 90 days or more - GSA requires 180 Incomplete
+# 3.1.3 Retain authd.log for 90 days or more - GSA requires 180 - Achieved via 3.1.1
 ##############################################
 # 3.2 Enable security auditing
 launchctl load -w /System/Library/LaunchDaemons/com.apple.auditd.plist
@@ -191,9 +191,9 @@ flags="lo,ad,fd,fm,-all"
 sed -ie 's/^flags\(.*\)/flags:'$flags'/' /etc/security/audit_control
 echo $(date) "Configure security auditing flags completed." >> /var/log/GSAlog
 ##############################################
-# 3.4 Enable remote logging for Desktops on trusted networks - Exception allowed 
+# 3.4 Enable remote logging for Desktops on trusted networks - Exception allowed line 10
 ##############################################
-# 3.5 Retain install.log for 365 or more days - Incomplete
+# 3.5 Retain install.log for 365 or more days - GSA requires 180 - Achieved via 3.1.1
 ##############################################
 # 4.1 Disable Bonjour advertising service
 defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
