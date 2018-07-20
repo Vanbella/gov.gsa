@@ -160,7 +160,9 @@ defaults write /Library/Preferences/com.apple.TimeMachine.plist AutoBackup 0
 # defaults write /Library/Preferences/com.apple.TimeMachine.plist DoNotOfferNewDisksForBackup Incomplete
 echo $(date) "2.8.1 Time Machine Disabled" >> /var/log/GSAlog
 ##############################################
-# 2.9 Pair the remote control infrared receiver if enabled - Incomplete
+# 2.9 Pair the remote control infrared receiver if enabled
+/usr/bin/defaults write /Library/Preferences/com.apple.driver.AppleIRController DeviceEnabled -bool no
+echo $(date) "2.9 Pair the remote control infrared receiver if enabled Disabled" >> /var/log/GSAlog
 ##############################################
 # 2.10 Enable Secure Keyboard Entry in Terminal.app - Incomplete
 ##############################################
