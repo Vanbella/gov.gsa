@@ -167,7 +167,7 @@ echo $(date) "2.6.4 Enable Firewall - Config Profile - GSA Security" >> /var/log
 # 2.6.5 Review Application Firewall Rules - Incomplete
 appsInBnd=`/usr/libexec/ApplicationFirewall/socketfilterfw --listapps|sed '/^$/d'`
 echo $(date) "2.6.5 Review Application Firewall Rules" >> /var/log/GSAlog
-echo $date $appsInBnd
+echo $date $appsInBnd >> /var/log/GSAlog
 ##############################################
 # 2.6.6 Enable Location Services - Disabled via Config Profile - GSA Settings-Custom - Incomplete
 ##############################################
