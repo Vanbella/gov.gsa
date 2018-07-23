@@ -205,7 +205,7 @@ echo $(date) "2.9 Pair the remote control infrared receiver if enabled completed
 defaults write /Users/"$user"/Library/Preferences/com.apple.Terminal SecureKeyboardEntry -bool true
 echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app completed" >> /var/log/GSAlog
 ##############################################
-# 2.11 Java 6 is not the default Java runtime - Incomplete
+# 2.11 Java 6 is not the default Java runtime
 jvm=`ls -la /Library/Java/JavaVirtualMachines|grep jdk`
 if [[ "$jvm" =~ "1.6" ]]; then
 echo $(date) "2.11 Java 6 is installed"
