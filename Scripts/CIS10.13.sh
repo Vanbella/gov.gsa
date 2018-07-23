@@ -111,9 +111,13 @@ defaults write /Library/Preferences/SystemConfiguration/com.apple.nat NAT -dict-
 echo $(date) "2.4.2 Disable Internet Sharing completed." >> /var/log/GSAlog
 ##############################################
 # 2.4.3 Disable Screen Sharing We Need this for Jamf Pro 
-#
+screenSharing=$(defaults read /System/Library/LaunchDaemons/com.apple.screensharing Disabled)
+if [ "$screenSharing" = "1" ]; then
+ echo $(date) "2.4.3 Screen Sharing Disabled"; else
+defaults write /System/Library/LaunchDaemons/com.apple.screensharing Disabled -bool true
+echo $(date) "2.4.3 Disable Screen Sharing completed"
 ##############################################
-# 2.4.3 Disable the printer sharing service
+# 2.4.4 Disable the printer sharing service
 cupsctl --no-share-printers
 # Disable for all installed printer objects
 # lpstat -p | awk '{print $2}'| xargs -I{} lpadmin -p {} -o printer-is-shared=false
