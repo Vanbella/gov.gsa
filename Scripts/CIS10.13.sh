@@ -206,6 +206,12 @@ defaults write /Users/"$user"/Library/Preferences/com.apple.Terminal SecureKeybo
 echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app completed" >> /var/log/GSAlog
 ##############################################
 # 2.11 Java 6 is not the default Java runtime - Incomplete
+jvm=`ls -la /Library/Java/JavaVirtualMachines|grep jdk`
+if [[ "$jvm" =~ "1.6" ]]; then
+echo $(date) "2.11 Java 6 is installed"
+else
+else $(date) "2.11 Java 6 is not the default Java runtime completed"
+fi
 ##############################################
 # 2.12 Securely delete files as needed - Incomplete
 ##############################################
