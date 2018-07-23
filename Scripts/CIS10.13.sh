@@ -60,7 +60,12 @@ cp /etc/ntp-restrict.conf /etc/ntp-restrict_old.conf
 echo -n "restrict lo interface ignore wildcard interface listen lo" >> /etc/ntp-restrict.conf
 echo $(date) "2.2.3 Restrict NTP server to loopback interface completed" 
 ##############################################
-# 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Incomplete
+# 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand)
+screenSaverTime="$(defaults read /Users/"$currentUser"/Library/Preferences/ByHost/com.apple.screensaver."$hardwareUUID" idleTime)"
+if [ "$screenSaverTime" -le "1200" ]; then
+echo $(date) "2.3.1 Screensaver Inactivity Set" | tee -a "$logFile"; else
+defaults write /Users/"$currentUser"/Library/Preferences/ByHost/com.apple.screensaver."$hardwareUUID".plist idleTime -int 1200
+echo $(date) "2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) completed"
 ##############################################
 # 2.3.2 Secure screen saver corners
 tlcorner=$( defaults read /Users/$user/Library/Preferences/com.apple.dock wvous-tl-corner )
