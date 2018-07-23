@@ -164,12 +164,13 @@ echo $(date) "2.6.3 Enable Firewall - Config Profile - GSA Security" >> /var/log
 # 2.6.4 Enable Firewall - Config Profile - GSA Security
 echo $(date) "2.6.4 Enable Firewall - Config Profile - GSA Security" >> /var/log/GSAlog
 ##############################################
-# 2.6.5 Review Application Firewall Rules - Incomplete
+# 2.6.5 Review Application Firewall Rules
 appsInBnd=`/usr/libexec/ApplicationFirewall/socketfilterfw --listapps|sed '/^$/d'`
 echo $(date) "2.6.5 Review Application Firewall Rules" >> /var/log/GSAlog
 echo $date $appsInBnd >> /var/log/GSAlog
 ##############################################
 # 2.6.6 Enable Location Services - Disabled via Config Profile - GSA Settings-Custom - Incomplete
+# ps -A|grep locationd|grep -v grep|awk '{print $3,$4}'
 ##############################################
 # 2.6.7 Monitor Location Services Access
 ##############################################
@@ -186,7 +187,7 @@ echo $(date) "2.8.1 Time Machine Disabled completed" >> /var/log/GSAlog
 /usr/bin/defaults write /Library/Preferences/com.apple.driver.AppleIRController DeviceEnabled -bool no
 echo $(date) "2.9 Pair the remote control infrared receiver if enabled completed" >> /var/log/GSAlog
 ##############################################
-# 2.10 Enable Secure Keyboard Entry in Terminal.app - Incomplete
+# 2.10 Enable Secure Keyboard Entry in Terminal.app
 defaults write /Users/"$user"/Library/Preferences/com.apple.Terminal SecureKeyboardEntry -bool true
 echo $(date) "2.10 Enable Secure Keyboard Entry in Terminal.app completed" >> /var/log/GSAlog
 ##############################################
