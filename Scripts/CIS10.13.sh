@@ -54,6 +54,11 @@ fi
 echo $(date) "2.2.2 Time set within appropriate limits completed." >> /var/log/GSAlog
 ##############################################
 # 2.2.3 Restrict NTP server to loopback interface - Incomplete
+restrictNTP=$(cat /etc/ntp-restrict.conf | grep -c "restrict lo")
+if [ "$restrictNTP" = "0" ]; then
+cp /etc/ntp-restrict.conf /etc/ntp-restrict_old.conf
+echo -n "restrict lo interface ignore wildcard interface listen lo" >> /etc/ntp-restrict.conf
+echo $(date) "2.2.3 Restrict NTP server to loopback interface completed" 
 ##############################################
 # 2.3.1 Set an inactivity interval of 20 mins or less for the screen saver (both LoginWindow and UserLand) - Incomplete
 ##############################################
